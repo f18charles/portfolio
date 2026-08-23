@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ink text-paper font-body antialiased selection:bg-cobalt selection:text-paper;
+  overflow-x: hidden;
+  background-color: #08080C;
+}
+
+/* Base custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A0F;
+}
+::-webkit-scrollbar-thumb {
+  background: #1F2438;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3E5CF0;
+}
+
+/* Neon Text Accents */
+.neon-signal {
+  color: #2ED67A;
+  text-shadow: 0 0 8px rgba(46, 214, 122, 0.65), 0 0 20px rgba(46, 214, 122, 0.35);
+}
+
+.neon-cobalt {
+  color: #607AFE;
+  text-shadow: 0 0 10px rgba(96, 122, 254, 0.75), 0 0 24px rgba(62, 92, 240, 0.4);
+}
+
+.neon-violet {
+  color: #C084FC;
+  text-shadow: 0 0 10px rgba(192, 132, 252, 0.75), 0 0 24px rgba(139, 47, 224, 0.4);
+}
+
+.neon-cyan {
+  color: #38BDF8;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.75), 0 0 22px rgba(56, 189, 248, 0.35);
+}
+
+.neon-amber {
+  color: #FBBF24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.7), 0 0 20px rgba(251, 191, 36, 0.35);
+}
+
+.neon-rose {
+  color: #FB7185;
+  text-shadow: 0 0 8px rgba(251, 113, 133, 0.7), 0 0 20px rgba(251, 113, 133, 0.35);
+}
+
+/* Neon Gradient Headlines */
+.neon-gradient-text {
+  background: linear-gradient(135deg, #FFFFFF 10%, #607AFE 50%, #2ED67A 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px rgba(96, 122, 254, 0.35));
+}
+
+.neon-gradient-purple {
+  background: linear-gradient(135deg, #FFFFFF 20%, #C084FC 60%, #607AFE 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px rgba(192, 132, 252, 0.35));
+}
+
+/* Signature animated gradient beam */
+.beam-underline {
+  background-image: linear-gradient(90deg, #1E3FE0, #8B2FE0, #2ED67A, #38BDF8, #1E3FE0);
+  background-size: 300% 100%;
+  box-shadow: 0 0 15px rgba(46, 214, 122, 0.4);
+}
+
+/* Terminal-style eyebrow labels, e.g. "// about", "$ contact" */
+.eyebrow {
+  @apply font-mono text-xs tracking-widest2 uppercase text-cobalt-soft;
+}
+
+/* Neon Card Borders and Glow Effects */
+.neon-card {
+  position: relative;
+  background: rgba(18, 20, 32, 0.55);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neon-card:hover {
+  border-color: rgba(96, 122, 254, 0.4);
+  box-shadow: 0 0 25px -5px rgba(62, 92, 240, 0.25), inset 0 0 15px rgba(96, 122, 254, 0.05);
+}
+
+.neon-card-signal:hover {
+  border-color: rgba(46, 214, 122, 0.45);
+  box-shadow: 0 0 25px -5px rgba(46, 214, 122, 0.25), inset 0 0 15px rgba(46, 214, 122, 0.05);
+}
+
+.neon-card-violet:hover {
+  border-color: rgba(192, 132, 252, 0.45);
+  box-shadow: 0 0 25px -5px rgba(192, 132, 252, 0.25), inset 0 0 15px rgba(192, 132, 252, 0.05);
+}
+
+/* Subtle glowing grid background pattern */
+.bg-cyber-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #2ED67A;
+  outline-offset: 2px;
+  box-shadow: 0 0 10px rgba(46, 214, 122, 0.5);
+}

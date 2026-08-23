@@ -1,5 +1,6 @@
+import { Link } from 'react-router-dom'
 import { useContent } from '../context/ContentContext.jsx'
-import { Mail, ArrowUpRight, Terminal } from 'lucide-react'
+import { Mail, ArrowUpRight, Terminal, Lock } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './Icons.jsx'
 
 export default function Footer() {
@@ -45,6 +46,15 @@ export default function Footer() {
             <span>email</span>
             <ArrowUpRight className="h-3 w-3 opacity-60" />
           </a>
+
+          <Link
+            to="/admin"
+            className="flex items-center gap-1 text-paper/30 transition-colors hover:text-paper/70"
+            title="CMS Admin Panel"
+          >
+            <Lock className="h-3 w-3" />
+            <span>admin</span>
+          </Link>
         </div>
       </div>
     </footer>

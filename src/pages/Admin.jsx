@@ -1,8 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useContent } from '../context/ContentContext.jsx'
 import { supabase } from '../lib/supabaseClient.js'
-import { Trash2, Plus, ArrowLeft, LogOut, Check, Save, Eye, EyeOff } from 'lucide-react'
+import {
+  Trash2,
+  Plus,
+  ArrowLeft,
+  LogOut,
+  Check,
+  Save,
+  Eye,
+  EyeOff,
+  AlertTriangle,
+  Database,
+  RefreshCw,
+  Lock,
+  ExternalLink,
+} from 'lucide-react'
 
 function Field({ label, ...props }) {
   return (
@@ -65,7 +79,7 @@ function Panel({ title, children }) {
   )
 }
 
-function LoginGate() {
+function LoginGate({ isConfigured }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
@@ -73,26 +87,70 @@ function LoginGate() {
 
   async function handleLogin(e) {
     e.preventDefault()
+    if (!isConfigured) {
+      setError(
+        'Supabase environment variables (VITE_SUPABASE_URL & VITE_SUPABASE_ANON_KEY) are not set. Please add them in your Vercel Project Settings or local .env file.',
+      )
+      return
+    }
+
     setBusy(true)
     setError(null)
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    setBusy(false)
-    if (signInError) setError(signInError.message)
+
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      })
+      if (signInError) {
+        setError(signInError.message)
+      }
+    } catch (err) {
+      setError(err.message || 'Unable to connect to Supabase authentication service.')
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6">
-      <h1 className="mb-2 font-display text-4xl neon-gradient-text">Admin Panel</h1>
-      <p className="mb-6 font-mono text-xs text-paper/50">
-        Log in with your authenticated Supabase user account to modify portfolio systems.
-      </p>
-      <form onSubmit={handleLogin} className="space-y-4">
+    <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-signal/40 bg-signal/10 shadow-[0_0_15px_rgba(46,214,122,0.25)]">
+          <Lock className="h-5 w-5 text-signal" />
+        </div>
+        <div>
+          <h1 className="font-display text-3xl neon-gradient-text">CMS Admin Panel</h1>
+          <p className="font-mono text-xs text-paper/50">Favor Charles Owuor Portfolio</p>
+        </div>
+      </div>
+
+      {!isConfigured && (
+        <div className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 font-mono text-xs text-amber-200">
+          <div className="flex items-center gap-2 mb-2 font-semibold text-amber-300">
+            <AlertTriangle className="h-4 w-4" />
+            <span>Supabase Not Configured</span>
+          </div>
+          <p className="leading-relaxed text-amber-200/90 mb-3">
+            To enable the live CMS, configure your Supabase project keys in Vercel (or your local{' '}
+            <code>.env</code> file):
+          </p>
+          <ul className="list-disc pl-4 space-y-1 text-paper/70 text-[11px]">
+            <li>
+              <code>VITE_SUPABASE_URL</code>
+            </li>
+            <li>
+              <code>VITE_SUPABASE_ANON_KEY</code>
+            </li>
+          </ul>
+        </div>
+      )}
+
+      <form onSubmit={handleLogin} className="space-y-4 rounded-xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md">
         <Field
-          label="Email"
+          label="Admin Email"
           type="email"
+          required
+          placeholder="admin@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="username"
@@ -100,30 +158,62 @@ function LoginGate() {
         <Field
           label="Password"
           type="password"
+          required
+          placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           autoComplete="current-password"
         />
-        {error && <p className="font-mono text-xs text-red-400">{error}</p>}
+
+        {error && (
+          <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 font-mono text-xs text-red-300">
+            {error}
+          </div>
+        )}
+
         <button
           type="submit"
           disabled={busy}
-          className="w-full rounded-lg bg-cobalt py-2.5 font-mono text-xs font-semibold text-paper hover:bg-cobalt-soft transition-colors disabled:opacity-50"
+          className="w-full rounded-lg bg-cobalt py-2.5 font-mono text-xs font-semibold text-paper hover:bg-cobalt-soft hover:shadow-[0_0_12px_rgba(96,122,254,0.4)] transition-all disabled:opacity-50 active:scale-95"
         >
           {busy ? 'Verifying credentials…' : 'Authenticate Session'}
         </button>
       </form>
-      <Link to="/" className="mt-6 inline-flex items-center gap-1 font-mono text-xs text-paper/40 hover:text-signal transition-colors">
-        <ArrowLeft className="h-3 w-3" />
-        Return to portfolio
-      </Link>
+
+      <div className="mt-6 flex items-center justify-between font-mono text-xs text-paper/40">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1 hover:text-signal transition-colors"
+        >
+          <ArrowLeft className="h-3 w-3" />
+          Return to portfolio
+        </Link>
+        <a
+          href="https://supabase.com/dashboard"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1 hover:text-paper transition-colors"
+        >
+          <span>Supabase Dashboard</span>
+          <ExternalLink className="h-3 w-3" />
+        </a>
+      </div>
     </div>
   )
 }
 
 export default function Admin() {
-  const { content, loading, error, updateSection, resetToDefaults, savedAt, session } =
-    useContent()
+  const {
+    content,
+    loading,
+    error: ctxError,
+    updateSection,
+    resetToDefaults,
+    savedAt,
+    session,
+    isConfigured,
+    reloadContent,
+  } = useContent()
 
   const [hero, setHero] = useState(content.hero || {})
   const [about, setAbout] = useState(content.about || {})
@@ -133,13 +223,28 @@ export default function Admin() {
 
   const [savedFlags, setSavedFlags] = useState({})
   const [busyFlags, setBusyFlags] = useState({})
+  const [actionError, setActionError] = useState(null)
+
+  // Keep local state in sync whenever content is loaded or refreshed from Supabase
+  useEffect(() => {
+    if (content) {
+      setHero(content.hero || {})
+      setAbout(content.about || {})
+      setSkillsText((content.about?.skills || []).join(', '))
+      setProjects(content.projects || [])
+      setContact(content.contact || {})
+    }
+  }, [content])
 
   async function withBusy(key, fn) {
+    setActionError(null)
     setBusyFlags((s) => ({ ...s, [key]: true }))
     try {
       await fn()
       setSavedFlags((s) => ({ ...s, [key]: true }))
-      setTimeout(() => setSavedFlags((s) => ({ ...s, [key]: false })), 1800)
+      setTimeout(() => setSavedFlags((s) => ({ ...s, [key]: false })), 2000)
+    } catch (err) {
+      setActionError(err.message || 'Failed to save changes')
     } finally {
       setBusyFlags((s) => ({ ...s, [key]: false }))
     }
@@ -148,7 +253,10 @@ export default function Admin() {
   const saveHero = () => withBusy('hero', () => updateSection('hero', hero))
 
   const saveAbout = () => {
-    const skills = skillsText.split(',').map((s) => s.trim()).filter(Boolean)
+    const skills = skillsText
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
     const next = { ...about, skills }
     setAbout(next)
     return withBusy('about', () => updateSection('about', next))
@@ -162,7 +270,7 @@ export default function Admin() {
   }
 
   function addProject() {
-    saveProjects([
+    const next = [
       ...projects,
       {
         id: `project-${Date.now()}`,
@@ -177,7 +285,8 @@ export default function Admin() {
         featured: false,
         hidden: false,
       },
-    ])
+    ]
+    saveProjects(next)
   }
 
   function updateProject(id, patch) {
@@ -191,40 +300,49 @@ export default function Admin() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <p className="font-mono text-sm text-signal">
-          Synchronizing content state…
-        </p>
+        <div className="flex items-center gap-3 font-mono text-sm text-signal">
+          <RefreshCw className="h-4 w-4 animate-spin" />
+          <span>Synchronizing content state…</span>
+        </div>
       </div>
     )
   }
 
   if (!session) {
-    return <LoginGate />
+    return <LoginGate isConfigured={isConfigured} />
   }
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
       {/* Admin Top Header */}
-      <div className="mb-8 flex items-center justify-between border-b border-white/10 pb-6">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
         <div>
-          <h1 className="font-display text-5xl">CMS Administration</h1>
-          <p className="font-mono text-xs text-paper/40 mt-1">
+          <h1 className="font-display text-5xl neon-gradient-text">CMS Administration</h1>
+          <p className="font-mono text-xs text-paper/50 mt-1">
             {savedAt ? `Last saved to cloud: ${savedAt.toLocaleString()}` : 'Ready to save'}
             {' · '}
             Logged in as <span className="text-signal">{session.user.email}</span>
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => reloadContent()}
+            className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-paper/70 hover:text-paper hover:bg-white/10 transition-all"
+            title="Reload latest from cloud"
+          >
+            <RefreshCw className="h-3.5 w-3.5 text-cobalt-soft" />
+            <span>Reload</span>
+          </button>
           <Link
             to="/"
-            className="flex items-center gap-1 font-mono text-xs text-paper/70 hover:text-signal transition-colors"
+            className="flex items-center gap-1 font-mono text-xs text-paper/70 hover:text-signal transition-colors px-2 py-1.5"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             View Site
           </Link>
           <button
             onClick={() => supabase.auth.signOut()}
-            className="flex items-center gap-1 font-mono text-xs text-rose-400 hover:text-rose-300 transition-colors"
+            className="flex items-center gap-1 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 font-mono text-xs text-rose-400 hover:bg-rose-500/20 transition-colors"
           >
             <LogOut className="h-3.5 w-3.5" />
             Sign out
@@ -232,9 +350,13 @@ export default function Admin() {
         </div>
       </div>
 
-      {error && (
-        <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 p-4 font-mono text-xs text-red-400">
-          Supabase Sync Notice: {error} (Falling back to local cache/defaults).
+      {(ctxError || actionError) && (
+        <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 p-4 font-mono text-xs text-red-300">
+          <div className="flex items-center gap-2 mb-1 font-semibold text-red-400">
+            <AlertTriangle className="h-4 w-4" />
+            <span>Error Notice</span>
+          </div>
+          {actionError || ctxError}
         </div>
       )}
 
@@ -285,7 +407,7 @@ export default function Admin() {
           <SaveButton onClick={saveAbout} saved={savedFlags.about} busy={busyFlags.about} />
         </Panel>
 
-        {/* PROJECTS SECTION (WITH VISIBILITY / HIDE DRAFTS TOGGLE) */}
+        {/* PROJECTS SECTION */}
         <Panel title="Projects & Technical Architectures">
           <div className="space-y-6">
             {projects.map((p, idx) => (
@@ -301,8 +423,7 @@ export default function Admin() {
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-xs text-signal font-semibold">#{idx + 1}</span>
                     <span className="font-mono text-xs text-paper/50">{p.id}</span>
-                    
-                    {/* Public vs Hidden / Draft Badge */}
+
                     {p.hidden ? (
                       <span className="inline-flex items-center gap-1 rounded bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 font-mono text-[10px] text-amber-400 font-semibold">
                         <EyeOff className="h-3 w-3" />
@@ -370,7 +491,6 @@ export default function Admin() {
                   }
                 />
 
-                {/* Dual URL Support: GitHub & Live Demo */}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field
                     label="GitHub Repository URL (optional)"
@@ -386,7 +506,6 @@ export default function Admin() {
                   />
                 </div>
 
-                {/* Project Visibility & Feature Toggles */}
                 <div className="flex flex-wrap items-center gap-6 pt-2 border-t border-white/5">
                   <label className="flex items-center gap-2 font-mono text-xs text-paper/80 cursor-pointer select-none">
                     <input
@@ -430,7 +549,7 @@ export default function Admin() {
           </div>
         </Panel>
 
-        {/* CONTACT SECTION (LOCATION REMOVED) */}
+        {/* CONTACT SECTION */}
         <Panel title="Contact & Social Channels">
           <Field
             label="Email Address"

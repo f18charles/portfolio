@@ -1,13 +1,28 @@
 import { createClient } from '@supabase/supabase-js'
 
-const url = import.meta.env.VITE_SUPABASE_URL
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const rawUrl = import.meta.env.VITE_SUPABASE_URL?.trim()
+const rawKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
 
-if (!url || !anonKey) {
+export const isSupabaseConfigured = Boolean(
+  rawUrl &&
+    rawKey &&
+    !rawUrl.includes('your-project-ref') &&
+    !rawKey.includes('your-anon-public-key') &&
+    rawUrl.startsWith('https://'),
+)
+
+const url = isSupabaseConfigured ? rawUrl : 'https://placeholder-project.supabase.co'
+const anonKey = isSupabaseConfigured ? rawKey : 'placeholder-anon-key'
+
+if (!isSupabaseConfigured) {
   console.warn(
-    'Supabase env vars are missing. Copy .env.example to .env and fill in ' +
-      'your project URL and anon key (see README.md).',
+    'Supabase credentials are not configured or invalid. The portfolio is operating in local static fallback mode. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to enable live CMS synchronization.',
   )
 }
 
-export const supabase = createClient(url ?? '', anonKey ?? '')
+export const supabase = createClient(url, anonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+})

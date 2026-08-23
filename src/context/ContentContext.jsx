@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import { supabase } from '../lib/supabaseClient.js'
+import { supabase, isSupabaseConfigured } from '../lib/supabaseClient.js'
 import defaultContent from '../data/defaultContent.js'
 
 const ROW_ID = 'site'
@@ -13,55 +13,73 @@ export function ContentProvider({ children }) {
   const [session, setSession] = useState(null)
 
   // Load the site content from Supabase on first render.
-  useEffect(() => {
-    let cancelled = false
+  const loadContent = useCallback(async () => {
+    if (!isSupabaseConfigured) {
+      setLoading(false)
+      return
+    }
 
-    async function load() {
+    try {
       const { data, error: fetchError } = await supabase
         .from('content')
         .select('data, updated_at')
         .eq('id', ROW_ID)
-        .single()
-
-      if (cancelled) return
+        .maybeSingle()
 
       if (fetchError) {
-        // Table/row might not exist yet, or env vars might be missing —
-        // fall back to the built-in defaults so the site still renders.
-        console.error('Could not load content from Supabase:', fetchError.message)
+        console.warn('Could not load content from Supabase:', fetchError.message)
         setError(fetchError.message)
         setLoading(false)
         return
       }
 
-      // Merge over defaults so missing fields (e.g. a brand new empty row)
-      // don't break the page.
-      setContent({ ...defaultContent, ...(data?.data ?? {}) })
-      setSavedAt(data?.updated_at ? new Date(data.updated_at) : null)
+      if (data?.data && Object.keys(data.data).length > 0) {
+        setContent({ ...defaultContent, ...data.data })
+        setSavedAt(data.updated_at ? new Date(data.updated_at) : null)
+      }
+    } catch (err) {
+      console.warn('Supabase fetch exception:', err)
+      setError(err.message || 'Failed to connect to Supabase')
+    } finally {
       setLoading(false)
-    }
-
-    load()
-    return () => {
-      cancelled = true
     }
   }, [])
 
+  useEffect(() => {
+    loadContent()
+  }, [loadContent])
+
   // Track auth session so the Admin page knows if someone's logged in.
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSession(data.session))
+    if (!isSupabaseConfigured) return
+
+    supabase.auth
+      .getSession()
+      .then(({ data }) => setSession(data?.session ?? null))
+      .catch((err) => console.warn('Supabase auth session error:', err))
+
     const { data: listener } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s)
     })
-    return () => listener.subscription.unsubscribe()
+
+    return () => listener?.subscription?.unsubscribe?.()
   }, [])
 
   async function writeContent(next) {
     setContent(next)
+
+    if (!isSupabaseConfigured) {
+      const msg = 'Supabase environment variables are missing. Changes applied locally only.'
+      setError(msg)
+      throw new Error(msg)
+    }
+
     const { error: writeError } = await supabase
       .from('content')
-      .update({ data: next, updated_at: new Date().toISOString() })
-      .eq('id', ROW_ID)
+      .upsert(
+        { id: ROW_ID, data: next, updated_at: new Date().toISOString() },
+        { onConflict: 'id' },
+      )
 
     if (writeError) {
       console.error('Could not save to Supabase:', writeError.message)
@@ -81,7 +99,17 @@ export function ContentProvider({ children }) {
 
   return (
     <ContentContext.Provider
-      value={{ content, loading, error, updateSection, resetToDefaults, savedAt, session }}
+      value={{
+        content,
+        loading,
+        error,
+        updateSection,
+        resetToDefaults,
+        savedAt,
+        session,
+        isConfigured: isSupabaseConfigured,
+        reloadContent: loadContent,
+      }}
     >
       {children}
     </ContentContext.Provider>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="8" fill="#08080C"/>
+  <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" stroke="#3B82F6" stroke-opacity="0.4"/>
+  <path d="M9 8H23V11.5H13V14.5H21V18H13V24H9V8Z" fill="url(#neon-grad)"/>
+  <circle cx="23" cy="22" r="2" fill="#10B981"/>
+  <defs>
+    <linearGradient id="neon-grad" x1="9" y1="8" x2="23" y2="24" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#A78BFA"/>
+    </linearGradient>
+  </defs>
+</svg>

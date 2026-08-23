@@ -162,12 +162,15 @@ npm run build
 
 The optimized static assets will be written to the `dist/` directory.
 
-### Deploying to Vercel / Netlify / Cloudflare Pages
+### Deploying to Vercel (Recommended)
 
-1. Push your code to GitHub.
-2. Import the repository in your hosting dashboard (e.g. Vercel).
-3. Set the `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` environment variables in the project settings.
-4. Deploy!
+1. **Push your repository** to GitHub/GitLab.
+2. **Import Project** in [Vercel Dashboard](https://vercel.com/new).
+3. **Framework Preset**: Vercel will automatically detect `Vite`.
+4. **Environment Variables**: Add your Supabase project keys in **Project Settings → Environment Variables**:
+   - `VITE_SUPABASE_URL`: `https://your-project-ref.supabase.co`
+   - `VITE_SUPABASE_ANON_KEY`: `your-anon-public-key`
+5. **Deploy**: Click **Deploy**. SPA route rewrites are handled automatically via [`vercel.json`](./vercel.json).
 
 ---
 

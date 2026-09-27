@@ -5,28 +5,22 @@ import { useLocation } from 'react-router-dom'
 const pageVariants = {
   initial: {
     opacity: 0,
-    y: 20,
-    scale: 0.99,
-    filter: 'blur(4px)',
+    y: 12,
   },
   animate: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    filter: 'blur(0px)',
     transition: {
-      duration: 0.45,
+      duration: 0.32,
       ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.1,
+      staggerChildren: 0.06,
     },
   },
   exit: {
     opacity: 0,
-    y: -15,
-    scale: 0.99,
-    filter: 'blur(4px)',
+    y: -8,
     transition: {
-      duration: 0.3,
+      duration: 0.2,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -36,7 +30,7 @@ export default function PageWrapper({ children, className = '' }) {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }, [pathname])
 
   return (

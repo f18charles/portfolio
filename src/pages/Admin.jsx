@@ -24,7 +24,7 @@ function Field({ label, ...props }) {
       <span className="mb-1 block font-mono text-xs text-paper/60">{label}</span>
       <input
         {...props}
-        className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-paper outline-none focus:border-cobalt-soft focus:shadow-[0_0_10px_rgba(96,122,254,0.3)] transition-all"
+        className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-paper outline-none transition-colors focus:border-cobalt-soft"
       />
     </label>
   )
@@ -37,7 +37,7 @@ function TextAreaField({ label, rows = 3, ...props }) {
       <textarea
         {...props}
         rows={rows}
-        className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-paper outline-none focus:border-cobalt-soft focus:shadow-[0_0_10px_rgba(96,122,254,0.3)] transition-all"
+        className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-paper outline-none transition-colors focus:border-cobalt-soft"
       />
     </label>
   )
@@ -48,14 +48,14 @@ function SaveButton({ onClick, saved, busy }) {
     <button
       onClick={onClick}
       disabled={busy}
-      className="flex items-center gap-1.5 rounded-lg bg-cobalt px-5 py-2 font-mono text-xs text-paper transition-all hover:bg-cobalt-soft hover:shadow-[0_0_12px_rgba(96,122,254,0.4)] disabled:opacity-50 active:scale-95"
+      className="flex items-center gap-1.5 rounded-lg bg-cobalt px-5 py-2 font-mono text-xs text-paper transition-colors hover:bg-cobalt-soft disabled:opacity-50"
     >
       {busy ? (
         'Saving…'
       ) : saved ? (
         <>
-          <Check className="h-3.5 w-3.5 text-signal" />
-          <span>Saved ✓</span>
+          <Check className="h-3.5 w-3.5" />
+          <span>Saved</span>
         </>
       ) : (
         <>
@@ -69,11 +69,8 @@ function SaveButton({ onClick, saved, busy }) {
 
 function Panel({ title, children }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-ink-surface/90 p-6 backdrop-blur-md shadow-xl neon-card">
-      <h2 className="mb-5 font-display text-2xl tracking-wide text-signal flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-signal shadow-[0_0_6px_#2ED67A]" />
-        {title}
-      </h2>
+    <div className="card rounded-xl p-6">
+      <h2 className="mb-5 font-display text-xl font-semibold tracking-tight text-paper">{title}</h2>
       <div className="space-y-4">{children}</div>
     </div>
   )
@@ -115,11 +112,11 @@ function LoginGate({ isConfigured }) {
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
       <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-signal/40 bg-signal/10 shadow-[0_0_15px_rgba(46,214,122,0.25)]">
-          <Lock className="h-5 w-5 text-signal" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-white/5">
+          <Lock className="h-5 w-5 text-paper/70" />
         </div>
         <div>
-          <h1 className="font-display text-3xl neon-gradient-text">CMS Admin Panel</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight text-paper">CMS Admin</h1>
           <p className="font-mono text-xs text-paper/50">Favor Charles Owuor Portfolio</p>
         </div>
       </div>
@@ -145,7 +142,7 @@ function LoginGate({ isConfigured }) {
         </div>
       )}
 
-      <form onSubmit={handleLogin} className="space-y-4 rounded-xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md">
+      <form onSubmit={handleLogin} className="space-y-4 rounded-xl border border-white/10 bg-white/[0.03] p-6">
         <Field
           label="Admin Email"
           type="email"
@@ -174,7 +171,7 @@ function LoginGate({ isConfigured }) {
         <button
           type="submit"
           disabled={busy}
-          className="w-full rounded-lg bg-cobalt py-2.5 font-mono text-xs font-semibold text-paper hover:bg-cobalt-soft hover:shadow-[0_0_12px_rgba(96,122,254,0.4)] transition-all disabled:opacity-50 active:scale-95"
+          className="w-full rounded-lg bg-cobalt py-2.5 font-mono text-xs font-semibold text-paper transition-colors hover:bg-cobalt-soft disabled:opacity-50"
         >
           {busy ? 'Verifying credentials…' : 'Authenticate Session'}
         </button>
@@ -219,6 +216,7 @@ export default function Admin() {
   const [about, setAbout] = useState(content.about || {})
   const [skillsText, setSkillsText] = useState((content.about?.skills || []).join(', '))
   const [projects, setProjects] = useState(content.projects || [])
+  const [articles, setArticles] = useState(content.articles || [])
   const [contact, setContact] = useState(content.contact || {})
 
   const [savedFlags, setSavedFlags] = useState({})
@@ -232,6 +230,7 @@ export default function Admin() {
       setAbout(content.about || {})
       setSkillsText((content.about?.skills || []).join(', '))
       setProjects(content.projects || [])
+      setArticles(content.articles || [])
       setContact(content.contact || {})
     }
   }, [content])
@@ -267,6 +266,62 @@ export default function Admin() {
   const saveProjects = (nextProjects) => {
     setProjects(nextProjects)
     return withBusy('projects', () => updateSection('projects', nextProjects))
+  }
+
+  const saveArticles = (nextArticles) => {
+    setArticles(nextArticles)
+    return withBusy('articles', () => updateSection('articles', nextArticles))
+  }
+
+  function addArticle() {
+    const next = [
+      ...articles,
+      {
+        id: `article-${Date.now()}`,
+        title: 'New Article',
+        excerpt: 'A short summary of what this article covers.',
+        source: 'dev.to',
+        date: new Date().toISOString().slice(0, 10),
+        readTime: '5 min read',
+        tags: ['Engineering'],
+        url: '',
+        featured: false,
+        hidden: false,
+      },
+    ]
+    saveArticles(next)
+  }
+
+  function updateArticle(id, patch) {
+    setArticles((prev) => prev.map((a) => (a.id === id ? { ...a, ...patch } : a)))
+  }
+
+  function removeArticle(id) {
+    saveArticles(articles.filter((a) => a.id !== id))
+  }
+
+  function updateHobby(index, patch) {
+    setAbout((prev) => ({
+      ...prev,
+      hobbies: (prev.hobbies || []).map((h, i) => (i === index ? { ...h, ...patch } : h)),
+    }))
+  }
+
+  function addHobby() {
+    setAbout((prev) => ({
+      ...prev,
+      hobbies: [
+        ...(prev.hobbies || []),
+        { name: 'New Hobby', icon: 'sparkles', description: 'Describe this interest.' },
+      ],
+    }))
+  }
+
+  function removeHobby(index) {
+    setAbout((prev) => ({
+      ...prev,
+      hobbies: (prev.hobbies || []).filter((_, i) => i !== index),
+    }))
   }
 
   function addProject() {
@@ -317,7 +372,9 @@ export default function Admin() {
       {/* Admin Top Header */}
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
         <div>
-          <h1 className="font-display text-5xl neon-gradient-text">CMS Administration</h1>
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-paper">
+            CMS Administration
+          </h1>
           <p className="font-mono text-xs text-paper/50 mt-1">
             {savedAt ? `Last saved to cloud: ${savedAt.toLocaleString()}` : 'Ready to save'}
             {' · '}
@@ -383,6 +440,20 @@ export default function Admin() {
             value={hero.status || ''}
             onChange={(e) => setHero({ ...hero, status: e.target.value })}
           />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="Professional Photo URL"
+              placeholder="/me.png"
+              value={hero.photoUrl || ''}
+              onChange={(e) => setHero({ ...hero, photoUrl: e.target.value })}
+            />
+            <Field
+              label="Résumé / CV File URL"
+              placeholder="/Favor_Charles_Owuor_Resume.pdf"
+              value={hero.resumeUrl || ''}
+              onChange={(e) => setHero({ ...hero, resumeUrl: e.target.value })}
+            />
+          </div>
           <SaveButton onClick={saveHero} saved={savedFlags.hero} busy={busyFlags.hero} />
         </Panel>
 
@@ -400,10 +471,69 @@ export default function Admin() {
             onChange={(e) => setAbout({ ...about, bio: e.target.value })}
           />
           <Field
+            label="About Photo URL (leave blank to inherit hero photo)"
+            placeholder="/me.png"
+            value={about.photoUrl || ''}
+            onChange={(e) => setAbout({ ...about, photoUrl: e.target.value })}
+          />
+          <Field
             label="Skills (Comma-separated list)"
             value={skillsText}
             onChange={(e) => setSkillsText(e.target.value)}
           />
+
+          {/* Hobbies Editor */}
+          <div className="space-y-3 border-t border-white/10 pt-4">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs uppercase tracking-wider text-paper/60">
+                Hobbies & Interests
+              </span>
+              <button
+                onClick={addHobby}
+                className="flex items-center gap-1 font-mono text-xs text-signal hover:underline"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Add hobby
+              </button>
+            </div>
+
+            {(about.hobbies || []).map((hobby, i) => (
+              <div
+                key={i}
+                className="space-y-3 rounded-lg border border-white/10 bg-white/[0.02] p-3"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10px] text-paper/40">Hobby #{i + 1}</span>
+                  <button
+                    onClick={() => removeHobby(i)}
+                    className="flex items-center gap-1 font-mono text-xs text-rose-400 hover:text-rose-300"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    Remove
+                  </button>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-[2fr_1fr]">
+                  <Field
+                    label="Name"
+                    value={hobby.name || ''}
+                    onChange={(e) => updateHobby(i, { name: e.target.value })}
+                  />
+                  <Field
+                    label="Icon (code, crown, mic, activity, book, music, sparkles)"
+                    value={hobby.icon || ''}
+                    onChange={(e) => updateHobby(i, { icon: e.target.value })}
+                  />
+                </div>
+                <TextAreaField
+                  label="Description"
+                  rows={2}
+                  value={hobby.description || ''}
+                  onChange={(e) => updateHobby(i, { description: e.target.value })}
+                />
+              </div>
+            ))}
+          </div>
+
           <SaveButton onClick={saveAbout} saved={savedFlags.about} busy={busyFlags.about} />
         </Panel>
 
@@ -452,18 +582,49 @@ export default function Admin() {
                   </button>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-3">
                   <Field
                     label="Project Title"
                     value={p.title || ''}
                     onChange={(e) => updateProject(p.id, { title: e.target.value })}
                   />
                   <Field
-                    label="Category (e.g. Full-Stack, Backend & Systems, AI & FinTech, Utilities)"
+                    label="Type (Personal / Team / Internal)"
+                    placeholder="Personal"
+                    value={p.type || ''}
+                    onChange={(e) => updateProject(p.id, { type: e.target.value })}
+                  />
+                  <Field
+                    label="Category (Full-Stack, AI & FinTech, Utilities…)"
                     value={p.category || ''}
                     onChange={(e) => updateProject(p.id, { category: e.target.value })}
                   />
                 </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field
+                    label="Period / Date"
+                    placeholder="2026"
+                    value={p.period || ''}
+                    onChange={(e) => updateProject(p.id, { period: e.target.value })}
+                  />
+                  <Field
+                    label="Role"
+                    placeholder="Solo developer / Backend lead · 6-person team"
+                    value={p.role || ''}
+                    onChange={(e) => updateProject(p.id, { role: e.target.value })}
+                  />
+                </div>
+
+                <Field
+                  label="Impact metrics (comma-separated, e.g. 5 REST resources, ~95% of commits)"
+                  value={(p.metrics || []).join(', ')}
+                  onChange={(e) =>
+                    updateProject(p.id, {
+                      metrics: e.target.value.split(',').map((m) => m.trim()).filter(Boolean),
+                    })
+                  }
+                />
 
                 <TextAreaField
                   label="Description"
@@ -549,6 +710,140 @@ export default function Admin() {
           </div>
         </Panel>
 
+        {/* ARTICLES SECTION */}
+        <Panel title="Articles & Writing">
+          <div className="space-y-6">
+            {articles.map((a, idx) => (
+              <div
+                key={a.id}
+                className={`space-y-4 rounded-xl border p-5 transition-colors ${
+                  a.hidden
+                    ? 'border-amber-500/30 bg-amber-500/[0.02]'
+                    : 'border-white/15 bg-white/[0.03]'
+                }`}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs font-semibold text-signal">#{idx + 1}</span>
+                    <span className="font-mono text-xs text-paper/50">{a.id}</span>
+                    {a.hidden ? (
+                      <span className="inline-flex items-center gap-1 rounded border border-amber-500/30 bg-amber-500/15 px-2 py-0.5 font-mono text-[10px] font-semibold text-amber-400">
+                        <EyeOff className="h-3 w-3" />
+                        Hidden (Draft)
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] font-semibold text-signal">
+                        <Eye className="h-3 w-3" />
+                        Published
+                      </span>
+                    )}
+                    {a.featured && !a.hidden && (
+                      <span className="rounded border border-cobalt-soft/40 bg-cobalt/20 px-2 py-0.5 font-mono text-[10px] font-semibold text-cobalt-soft">
+                        Featured
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => removeArticle(a.id)}
+                    className="flex items-center gap-1 font-mono text-xs text-rose-400 transition-colors hover:text-rose-300"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    Delete
+                  </button>
+                </div>
+
+                <Field
+                  label="Title"
+                  value={a.title || ''}
+                  onChange={(e) => updateArticle(a.id, { title: e.target.value })}
+                />
+
+                <TextAreaField
+                  label="Excerpt / Summary"
+                  rows={2}
+                  value={a.excerpt || ''}
+                  onChange={(e) => updateArticle(a.id, { excerpt: e.target.value })}
+                />
+
+                <Field
+                  label="Article URL (dev.to, X, blog…)"
+                  placeholder="https://dev.to/..."
+                  value={a.url || ''}
+                  onChange={(e) => updateArticle(a.id, { url: e.target.value })}
+                />
+
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <Field
+                    label="Source (dev.to / x / blog)"
+                    value={a.source || ''}
+                    onChange={(e) => updateArticle(a.id, { source: e.target.value })}
+                  />
+                  <Field
+                    label="Date (YYYY-MM-DD)"
+                    type="date"
+                    value={a.date || ''}
+                    onChange={(e) => updateArticle(a.id, { date: e.target.value })}
+                  />
+                  <Field
+                    label="Read Time"
+                    placeholder="5 min read"
+                    value={a.readTime || ''}
+                    onChange={(e) => updateArticle(a.id, { readTime: e.target.value })}
+                  />
+                </div>
+
+                <Field
+                  label="Tags (Comma-separated)"
+                  value={(a.tags || []).join(', ')}
+                  onChange={(e) =>
+                    updateArticle(a.id, {
+                      tags: e.target.value.split(',').map((t) => t.trim()).filter(Boolean),
+                    })
+                  }
+                />
+
+                <div className="flex flex-wrap items-center gap-6 border-t border-white/5 pt-2">
+                  <label className="flex cursor-pointer select-none items-center gap-2 font-mono text-xs text-paper/80">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(a.hidden)}
+                      onChange={(e) => updateArticle(a.id, { hidden: e.target.checked })}
+                      className="rounded border-white/20 bg-white/5 text-amber-400 focus:ring-0"
+                    />
+                    <span className={a.hidden ? 'font-semibold text-amber-400' : 'text-paper/70'}>
+                      Hide from public site
+                    </span>
+                  </label>
+                  <label className="flex cursor-pointer select-none items-center gap-2 font-mono text-xs text-paper/80">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(a.featured)}
+                      onChange={(e) => updateArticle(a.id, { featured: e.target.checked })}
+                      className="rounded border-white/20 bg-white/5 text-signal focus:ring-0"
+                    />
+                    <span>Feature at top</span>
+                  </label>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-4">
+            <button
+              onClick={addArticle}
+              className="flex items-center gap-1.5 rounded-lg border border-white/20 px-4 py-2 font-mono text-xs text-paper/90 transition-colors hover:border-signal hover:text-signal"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Add New Article
+            </button>
+            <SaveButton
+              onClick={() => saveArticles(articles)}
+              saved={savedFlags.articles}
+              busy={busyFlags.articles}
+            />
+          </div>
+        </Panel>
+
         {/* CONTACT SECTION */}
         <Panel title="Contact & Social Channels">
           <Field
@@ -556,16 +851,42 @@ export default function Admin() {
             value={contact.email || ''}
             onChange={(e) => setContact({ ...contact, email: e.target.value })}
           />
-          <Field
-            label="GitHub Profile URL"
-            value={contact.github || ''}
-            onChange={(e) => setContact({ ...contact, github: e.target.value })}
-          />
-          <Field
-            label="LinkedIn Profile URL"
-            value={contact.linkedin || ''}
-            onChange={(e) => setContact({ ...contact, linkedin: e.target.value })}
-          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="GitHub Profile URL"
+              value={contact.github || ''}
+              onChange={(e) => setContact({ ...contact, github: e.target.value })}
+            />
+            <Field
+              label="LinkedIn Profile URL"
+              value={contact.linkedin || ''}
+              onChange={(e) => setContact({ ...contact, linkedin: e.target.value })}
+            />
+            <Field
+              label="Dev.to Profile URL"
+              value={contact.devto || ''}
+              onChange={(e) => setContact({ ...contact, devto: e.target.value })}
+            />
+            <Field
+              label="X / Twitter Profile URL"
+              value={contact.x || ''}
+              onChange={(e) => setContact({ ...contact, x: e.target.value })}
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="Résumé / CV PDF URL"
+              placeholder="/Favor_Charles_Owuor_Resume.pdf"
+              value={contact.resumeUrl || ''}
+              onChange={(e) => setContact({ ...contact, resumeUrl: e.target.value })}
+            />
+            <Field
+              label="Résumé / CV DOCX URL (optional)"
+              placeholder="/Favor_Charles_Owuor_Resume.docx"
+              value={contact.resumeDocxUrl || ''}
+              onChange={(e) => setContact({ ...contact, resumeDocxUrl: e.target.value })}
+            />
+          </div>
           <TextAreaField
             label="Contact Intro Message"
             value={contact.message || ''}

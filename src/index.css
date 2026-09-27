@@ -7,114 +7,60 @@ html {
 }
 
 body {
-  @apply bg-ink text-paper font-body antialiased selection:bg-cobalt selection:text-paper;
+  @apply bg-ink text-paper font-body antialiased;
   overflow-x: hidden;
-  background-color: #08080C;
+  background-color: #0b0c12;
 }
 
-/* Base custom scrollbar */
+/* Base scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0A0F;
+  background: #0b0c12;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1F2438;
-  border-radius: 4px;
+  background: #2a2e3d;
+  border-radius: 6px;
+  border: 2px solid #0b0c12;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3E5CF0;
+  background: #3a3f52;
 }
 
-/* Neon Text Accents */
-.neon-signal {
-  color: #2ED67A;
-  text-shadow: 0 0 8px rgba(46, 214, 122, 0.65), 0 0 20px rgba(46, 214, 122, 0.35);
-}
-
-.neon-cobalt {
-  color: #607AFE;
-  text-shadow: 0 0 10px rgba(96, 122, 254, 0.75), 0 0 24px rgba(62, 92, 240, 0.4);
-}
-
-.neon-violet {
-  color: #C084FC;
-  text-shadow: 0 0 10px rgba(192, 132, 252, 0.75), 0 0 24px rgba(139, 47, 224, 0.4);
-}
-
-.neon-cyan {
-  color: #38BDF8;
-  text-shadow: 0 0 10px rgba(56, 189, 248, 0.75), 0 0 22px rgba(56, 189, 248, 0.35);
-}
-
-.neon-amber {
-  color: #FBBF24;
-  text-shadow: 0 0 8px rgba(251, 191, 36, 0.7), 0 0 20px rgba(251, 191, 36, 0.35);
-}
-
-.neon-rose {
-  color: #FB7185;
-  text-shadow: 0 0 8px rgba(251, 113, 133, 0.7), 0 0 20px rgba(251, 113, 133, 0.35);
-}
-
-/* Neon Gradient Headlines */
-.neon-gradient-text {
-  background: linear-gradient(135deg, #FFFFFF 10%, #607AFE 50%, #2ED67A 90%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 16px rgba(96, 122, 254, 0.35));
-}
-
-.neon-gradient-purple {
-  background: linear-gradient(135deg, #FFFFFF 20%, #C084FC 60%, #607AFE 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 16px rgba(192, 132, 252, 0.35));
-}
-
-/* Signature animated gradient beam */
-.beam-underline {
-  background-image: linear-gradient(90deg, #1E3FE0, #8B2FE0, #2ED67A, #38BDF8, #1E3FE0);
-  background-size: 300% 100%;
-  box-shadow: 0 0 15px rgba(46, 214, 122, 0.4);
-}
-
-/* Terminal-style eyebrow labels, e.g. "// about", "$ contact" */
+/* Small monospace label used for section eyebrows */
 .eyebrow {
-  @apply font-mono text-xs tracking-widest2 uppercase text-cobalt-soft;
+  @apply font-mono text-xs text-paper/50;
 }
 
-/* Neon Card Borders and Glow Effects */
-.neon-card {
-  position: relative;
-  background: rgba(18, 20, 32, 0.55);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+/* Simple, flat card surface — no glow, no blur. */
+.card {
+  background: #11131c;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.neon-card:hover {
-  border-color: rgba(96, 122, 254, 0.4);
-  box-shadow: 0 0 25px -5px rgba(62, 92, 240, 0.25), inset 0 0 15px rgba(96, 122, 254, 0.05);
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-.neon-card-signal:hover {
-  border-color: rgba(46, 214, 122, 0.45);
-  box-shadow: 0 0 25px -5px rgba(46, 214, 122, 0.25), inset 0 0 15px rgba(46, 214, 122, 0.05);
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: #11131c;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0 0 0.5rem 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.875rem;
+  color: #fafaf9;
 }
 
-.neon-card-violet:hover {
-  border-color: rgba(192, 132, 252, 0.45);
-  box-shadow: 0 0 25px -5px rgba(192, 132, 252, 0.25), inset 0 0 15px rgba(192, 132, 252, 0.05);
-}
-
-/* Subtle glowing grid background pattern */
-.bg-cyber-grid {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+.skip-link:focus {
+  left: 0;
 }
 
 /* Reduced motion respect */
@@ -132,7 +78,38 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #2ED67A;
+  outline: 2px solid #607afe;
   outline-offset: 2px;
-  box-shadow: 0 0 10px rgba(46, 214, 122, 0.5);
 }
+
+/* Print: render the résumé page as a clean black-on-white document */
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+
+  .no-print,
+  header,
+  footer,
+  .skip-link {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+
+  .resume-doc,
+  .resume-doc * {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border-color: #dddddd !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .resume-doc a {
+    text-decoration: underline;
+  }
+}
+

@@ -10,21 +10,27 @@ Designed with a cyber-neon aesthetic, smooth page-level route transitions, inter
 
 - **Cyber-Neon Dark Aesthetic**: Tailored obsidian backgrounds (`#08080C`), radiant neon gradients, custom text glows (`.neon-signal`, `.neon-cobalt`, `.neon-violet`, `.neon-cyan`), and animated laser beams.
 - **Interactive Ambient Lighting**: Dynamic cursor spotlight (`CursorSpotlight.jsx`) tracking viewport interaction with smooth radial neon glows.
-- **Interactive In-Browser CLI Terminal**: Embedded command-line terminal on the landing page supporting quick command chips and interactive inputs (`whoami`, `skills`, `projects`, `education`, `contact`, `help`, `clear`).
+- **Professional Photo Hero**: A neon-framed portrait (`me.png`) with floating motion, corner brackets, and a nameplate, plus a matching portrait on the About page — both served from a CMS-controlled `photoUrl`.
+- **Résumé / CV Downloads**: One-click résumé delivery surfaced in the navbar, hero, About, Contact, footer, and CLI terminal via a CMS-controlled `resumeUrl` (`/Favor_Charles_Owuor_Resume.docx`).
+- **Social Channels Everywhere**: LinkedIn, GitHub, **Dev.to**, and **X** links with branded icons across the hero, contact deck, footer, and terminal.
+- **Interactive In-Browser CLI Terminal**: Embedded command-line terminal on the landing page supporting quick command chips and interactive inputs (`whoami`, `skills`, `projects`, `articles`, `education`, `contact`, `resume`, `help`, `clear`).
+- **Internal vs. Personal Projects**: Every project carries a `type` (e.g. `Internal`, `Personal`, `Team`) rendered as a badge and filterable on the Projects page alongside category and tech search.
 - **Dynamic Projects Showcase (Dual Links)**:
   - Supports both **Live Deployed Demos** (with direct launch badges) and **GitHub Source Code** repositories for every project.
   - **Draft / Visibility Controls**: Easily hide in-progress or polishing projects from the public site with a single toggle in the `/admin` portal.
   - Interactive category filtering (`All`, `Full-Stack`, `Distributed Systems`, `AI & FinTech`, `Utilities`).
   - Real-time search by technology/tag (`Go`, `PostgreSQL`, `React`, `Gemini AI`, etc.).
   - Expandable technical engineering highlights drawn directly from the developer's architecture logs and CV.
+- **Articles & Writing Section**: A dedicated `/articles` route with tag filters, keyword search, source badges (Dev.to / X), read-time and date metadata, featured layout, and a `tail -n 2` teaser on the landing page — all managed from the CMS.
+- **Hobbies & Interests**: A neon icon-grid of relevant hobbies on both the landing page and About page (`Open Source`, `Chess`, `Public Speaking`, `Football & Running`, `Reading`, `Music`), fully editable in the CMS.
 - **Categorized Technical Matrix & Education**:
   - Domain-separated skill categories (Backend & Systems, Frontend & UI, Databases & DevOps, AI & Data Engineering) with glowing interactive badges.
   - Peer-to-peer software engineering background at Zone01 Kisumu, BSc Statistics & Programming foundations, and certifications.
 - **Interactive Contact Deck**:
   - One-click copy email button with celebratory canvas confetti and animated validation.
-  - Quick mailto launcher and direct social channels (GitHub, LinkedIn).
+  - Quick mailto launcher plus a full channel grid (Email, GitHub, LinkedIn, Dev.to, X, Résumé).
 - **Cinematic Route Transitions**: Powered by Framer Motion's `AnimatePresence` with coordinated scale, blur, and slide transitions across all routes.
-- **Live Cloud CMS (`/admin`)**: Edit Hero, About, Skills, Projects (including dual Live + GitHub URLs, technical highlights, and Work-in-Progress draft visibility toggles), and Contact information with real-time Supabase persistence.
+- **Live Cloud CMS (`/admin`)**: Edit Hero (including professional photo + résumé URL), About (bio, skills, hobbies), Skills, Projects (including type, dual Live + GitHub URLs, technical highlights, and Work-in-Progress draft visibility toggles), Articles (CRUD, source, tags, visibility), and Contact/social channels with real-time Supabase persistence.
 
 ---
 
@@ -42,30 +48,38 @@ Designed with a cyber-neon aesthetic, smooth page-level route transitions, inter
 
 ```
 portfolio/
-├── index.html                  # HTML entrypoint with Bebas Neue, Inter, and IBM Plex Mono fonts
+├── index.html                  # HTML entrypoint with Bebas Neue, Inter, and IBM Plex Mono fonts + SEO/OG meta
 ├── vite.config.js              # Vite bundler configuration
 ├── tailwind.config.js          # Custom colors (ink, cobalt, violet, signal, cyan, amber) & animations
 ├── package.json
+├── me.png                      # Professional photo (also served from /public/me.png)
+├── public/
+│   ├── favicon.svg
+│   ├── me.png                  # CMS-default professional photo
+│   └── Favor_Charles_Owuor_Resume.docx  # CMS-default downloadable résumé
 └── src/
     ├── main.jsx                # Application root mounting ContentProvider and Router
     ├── App.jsx                 # Main layout with Navbar, Footer, CursorSpotlight, and Route Transitions
     ├── index.css               # Neon utilities, scrollbars, glowing text shadows, cyber grid
     ├── components/
-    │   ├── Navbar.jsx          # Sticky nav with glowing active tab indicators and mobile drawer
-    │   ├── Footer.jsx          # Responsive footer with social channels
+    │   ├── Navbar.jsx          # Sticky nav with glowing active tab indicators, résumé CTA and mobile drawer
+    │   ├── Footer.jsx          # Rich footer with navigation, socials (GitHub/LinkedIn/Dev.to/X) and résumé
     │   ├── CursorSpotlight.jsx # Ambient radial gradient following user cursor
     │   ├── InteractiveTerminal.jsx # Interactive in-browser CLI terminal
     │   ├── PageWrapper.jsx     # Cinematic page transition container
-    │   ├── ProjectCard.jsx     # Card component with dual live/github links & highlights
+    │   ├── ProjectCard.jsx     # Card with type badge (Internal/Personal), dual live/github links & highlights
+    │   ├── ArticleCard.jsx     # Article card with source badge, tags, date & read time
     │   ├── StatusBadge.jsx     # Pulsing neon emerald availability badge
     │   ├── SectionLabel.jsx    # Terminal prompt with blinking cursor
+    │   ├── Icons.jsx           # Brand icons (GitHub, LinkedIn, Dev.to, X)
     │   └── AnimatedReveal.jsx  # Scroll-triggered viewport animations
     ├── pages/
-    │   ├── Landing.jsx         # Hero showcase, stats, interactive CLI, featured projects
-    │   ├── About.jsx           # Engineering narrative, domain skill matrix, education timeline
-    │   ├── Projects.jsx        # Filterable project catalog with live & github links
-    │   ├── Contact.jsx         # Contact deck with email copier, confetti, and social links
-    │   └── Admin.jsx           # Protected CMS panel for live content editing
+    │   ├── Landing.jsx         # Hero (photo + résumé), stats, CLI, featured projects, hobbies, articles
+    │   ├── About.jsx           # Narrative, photo, skill matrix, education, attributes & hobbies
+    │   ├── Projects.jsx        # Filterable catalog by scope (Internal/Personal) + category + search
+    │   ├── Articles.jsx        # Tag-filterable, searchable writing archive
+    │   ├── Contact.jsx         # Contact deck, channel grid (incl. Dev.to/X/résumé), confetti copier
+    │   └── Admin.jsx           # Protected CMS panel for live content editing (incl. articles & hobbies)
     ├── context/
     │   └── ContentContext.jsx  # Supabase synchronization & fallback data provider
     ├── data/

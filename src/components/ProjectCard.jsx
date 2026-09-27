@@ -1,7 +1,18 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ExternalLink, Layers, ChevronDown, ChevronUp, CheckCircle2 } from 'lucide-react'
+import { ExternalLink, Layers, ChevronDown, ChevronUp, CheckCircle2, User, Building2 } from 'lucide-react'
 import { GithubIcon } from './Icons.jsx'
+
+const typeStyles = {
+  Personal: {
+    Icon: User,
+    cls: 'border-signal/30 bg-signal/10 text-signal',
+  },
+  Internal: {
+    Icon: Building2,
+    cls: 'border-cobalt-soft/30 bg-cobalt/10 text-cobalt-soft',
+  },
+}
 
 export default function ProjectCard({ project, index }) {
   const [showDetails, setShowDetails] = useState(false)
@@ -39,6 +50,8 @@ export default function ProjectCard({ project, index }) {
   ]
 
   const accent = accents[index % accents.length]
+  const typeMeta = project.type ? typeStyles[project.type] : null
+  const TypeIcon = typeMeta?.Icon
 
   // Resolve links (both live demo and github repo)
   const githubLink = project.githubUrl || (project.link?.includes('github.com') ? project.link : null)
@@ -55,6 +68,14 @@ export default function ProjectCard({ project, index }) {
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs text-paper/40">0{index + 1}</span>
+            {typeMeta && (
+              <span
+                className={`inline-flex items-center gap-1 rounded border px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider ${typeMeta.cls}`}
+              >
+                <TypeIcon className="h-3 w-3" />
+                {project.type}
+              </span>
+            )}
             {project.category && (
               <span className="rounded bg-white/5 border border-white/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-paper/70">
                 {project.category}

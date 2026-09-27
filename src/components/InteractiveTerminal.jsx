@@ -15,7 +15,7 @@ export default function InteractiveTerminal() {
   ])
   const scrollRef = useRef(null)
 
-  const quickCommands = ['whoami', 'skills', 'projects', 'education', 'contact', 'clear']
+  const quickCommands = ['whoami', 'skills', 'projects', 'articles', 'education', 'contact', 'resume', 'clear']
 
   const handleCommand = (cmdStr) => {
     const rawCmd = (cmdStr || input).trim()
@@ -40,8 +40,10 @@ export default function InteractiveTerminal() {
               <div><span className="text-signal font-bold">whoami</span> — Overview & bio</div>
               <div><span className="text-cobalt-soft font-bold">skills</span> — Tech stack matrix</div>
               <div><span className="text-violet-soft font-bold">projects</span> — Key architectures</div>
-              <div><span className="text-cyan-soft font-bold">education</span> — Academic & Zone01</div>
+              <div><span className="text-cyan-soft font-bold">articles</span> — Latest writing</div>
+              <div><span className="text-amber-soft font-bold">education</span> — Academic & Zone01</div>
               <div><span className="text-amber-soft font-bold">contact</span> — Get in touch</div>
+              <div><span className="text-rose-400 font-bold">resume</span> — Download CV</div>
               <div><span className="text-paper/40 font-bold">clear</span> — Wipe terminal output</div>
             </div>
           </div>
@@ -111,6 +113,35 @@ export default function InteractiveTerminal() {
           </div>
         ),
       })
+    } else if (clean === 'articles') {
+      const visibleArticles = (content.articles || []).filter((a) => !a.hidden)
+      newHistory.push({
+        type: 'output',
+        content: (
+          <div className="space-y-2 text-xs">
+            <p className="text-paper/80 font-semibold">Latest Writing:</p>
+            <div className="space-y-2 pt-1">
+              {visibleArticles.slice(0, 3).map((a) => (
+                <a
+                  key={a.id}
+                  href={a.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block border-l-2 border-signal/60 pl-2 hover:border-signal"
+                >
+                  <div className="font-semibold text-paper/90">{a.title}</div>
+                  <div className="text-[11px] text-paper/60 line-clamp-1">{a.excerpt}</div>
+                </a>
+              ))}
+            </div>
+            <div className="pt-1">
+              <Link to="/articles" className="inline-flex items-center gap-1 font-mono text-xs text-signal hover:underline">
+                Read all articles <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+          </div>
+        ),
+      })
     } else if (clean === 'education') {
       newHistory.push({
         type: 'output',
@@ -135,7 +166,30 @@ export default function InteractiveTerminal() {
           <div className="space-y-1.5 text-xs text-paper/80 font-mono">
             <div><span className="text-paper/40">Email:</span> <a href={`mailto:${content.contact.email}`} className="text-signal hover:underline">{content.contact.email}</a></div>
             <div><span className="text-paper/40">GitHub:</span> <a href={content.contact.github} target="_blank" rel="noreferrer" className="text-cobalt-soft hover:underline">{content.contact.github}</a></div>
-            <div><span className="text-paper/40">LinkedIn:</span> <a href={content.contact.linkedin} target="_blank" rel="noreferrer" className="text-violet-soft hover:underline">linkedin.com/in/favorowuor</a></div>
+            <div><span className="text-paper/40">LinkedIn:</span> <a href={content.contact.linkedin} target="_blank" rel="noreferrer" className="text-violet-soft hover:underline">{content.contact.linkedin}</a></div>
+            {content.contact.devto && (
+              <div><span className="text-paper/40">Dev.to:</span> <a href={content.contact.devto} target="_blank" rel="noreferrer" className="text-cyan-soft hover:underline">{content.contact.devto}</a></div>
+            )}
+            {content.contact.x && (
+              <div><span className="text-paper/40">X:</span> <a href={content.contact.x} target="_blank" rel="noreferrer" className="text-paper hover:underline">{content.contact.x}</a></div>
+            )}
+          </div>
+        ),
+      })
+    } else if (clean === 'resume') {
+      const resumeUrl = content.contact.resumeUrl || content.hero?.resumeUrl
+      newHistory.push({
+        type: 'output',
+        content: (
+          <div className="space-y-1.5 text-xs text-paper/80 font-mono">
+            <p className="text-paper/80 font-semibold">Résumé / Curriculum Vitae</p>
+            {resumeUrl ? (
+              <a href={resumeUrl} target="_blank" rel="noreferrer" download className="inline-flex items-center gap-1 text-amber-soft hover:underline">
+                Download {resumeUrl.split('/').pop()} <ArrowRight className="h-3 w-3" />
+              </a>
+            ) : (
+              <p className="text-paper/60">No résumé file configured yet.</p>
+            )}
           </div>
         ),
       })

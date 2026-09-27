@@ -4,13 +4,20 @@ import { useContent } from '../context/ContentContext.jsx'
 import SectionLabel from '../components/SectionLabel.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
 import PageWrapper from '../components/PageWrapper.jsx'
-import { Code2, Filter, Search } from 'lucide-react'
+import { Code2, Search, User, Building2, Layers } from 'lucide-react'
+
+const typeIcons = {
+  All: Layers,
+  Personal: User,
+  Internal: Building2,
+}
 
 export default function Projects() {
   const { content } = useContent()
   const { projects = [] } = content
 
   const [selectedCategory, setSelectedCategory] = useState('All')
+  const [selectedType, setSelectedType] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
 
   // Only include non-hidden projects on public page
@@ -29,9 +36,19 @@ export default function Projects() {
     return Array.from(set)
   }, [visibleProjects])
 
-  // Filter projects by active category and search keyword
+  // Derive project types (Personal, Internal, ...) dynamically
+  const types = useMemo(() => {
+    const set = new Set()
+    visibleProjects.forEach((p) => {
+      if (p.type) set.add(p.type)
+    })
+    return Array.from(set).sort()
+  }, [visibleProjects])
+
+  // Filter projects by active type, category and search keyword
   const filteredProjects = useMemo(() => {
     return visibleProjects.filter((p) => {
+      const matchesType = selectedType === 'All' || p.type === selectedType
       const matchesCategory =
         selectedCategory === 'All' || p.category === selectedCategory
       const matchesSearch =
@@ -39,9 +56,15 @@ export default function Projects() {
         p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.tags?.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()))
-      return matchesCategory && matchesSearch
+      return matchesType && matchesCategory && matchesSearch
     })
-  }, [visibleProjects, selectedCategory, searchQuery])
+  }, [visibleProjects, selectedType, selectedCategory, searchQuery])
+
+  const resetFilters = () => {
+    setSelectedType('All')
+    setSelectedCategory('All')
+    setSearchQuery('')
+  }
 
   return (
     <PageWrapper className="mx-auto max-w-6xl px-6 py-20 md:py-24">
@@ -58,8 +81,46 @@ export default function Projects() {
         </div>
       </div>
 
+      {/* Project Type Filter (Internal / Personal) */}
+      {types.length > 0 && (
+        <div className="mt-8 flex flex-wrap items-center gap-2">
+          <span className="mr-1 font-mono text-[10px] uppercase tracking-widest text-paper/40">
+            Scope
+          </span>
+          {['All', ...types].map((t) => {
+            const isSelected = selectedType === t
+            const Icon = typeIcons[t] || Layers
+            const count =
+              t === 'All'
+                ? visibleProjects.length
+                : visibleProjects.filter((p) => p.type === t).length
+            return (
+              <button
+                key={t}
+                onClick={() => setSelectedType(t)}
+                className={`flex items-center gap-1.5 rounded-lg border px-3.5 py-1.5 font-mono text-xs transition-all ${
+                  isSelected
+                    ? 'border-cobalt-soft/50 bg-cobalt/15 font-semibold text-cobalt-soft shadow-[0_0_12px_rgba(96,122,254,0.3)]'
+                    : 'border-white/10 bg-white/[0.02] text-paper/60 hover:border-white/20 hover:text-paper'
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                <span>{t === 'All' ? 'All Projects' : t}</span>
+                <span
+                  className={`rounded-full px-1.5 text-[10px] ${
+                    isSelected ? 'bg-cobalt/25 text-cobalt-soft' : 'bg-white/10 text-paper/40'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      )}
+
       {/* Interactive Filter & Search Toolbar */}
-      <div className="mt-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-y border-white/10 py-4">
+      <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-y border-white/10 py-4">
         {/* Category Pills */}
         <div className="flex flex-wrap items-center gap-2">
           {categories.map((cat) => {
@@ -111,14 +172,11 @@ export default function Projects() {
           <p className="font-mono text-sm text-paper/60">
             {visibleProjects.length === 0
               ? 'Projects are currently being polished. Check back shortly!'
-              : `No projects matched "${searchQuery || selectedCategory}".`}
+              : `No projects matched "${searchQuery || selectedType || selectedCategory}".`}
           </p>
           {visibleProjects.length > 0 && (
             <button
-              onClick={() => {
-                setSelectedCategory('All')
-                setSearchQuery('')
-              }}
+              onClick={resetFilters}
               className="mt-4 inline-flex items-center gap-1 font-mono text-xs text-signal hover:underline"
             >
               Reset filters

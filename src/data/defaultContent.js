@@ -8,6 +8,8 @@ const defaultContent = {
     role: 'Software Developer & AI-Native Engineer',
     tagline: 'Architecting resilient backend systems, distributed architectures, and AI-integrated software.',
     status: 'Available for Software Engineering Roles & Internships',
+    photoUrl: '/me.png',
+    resumeUrl: '/Favor_Charles_Owuor_Resume.docx',
     stats: [
       { value: '7+', label: 'Projects Built' },
       { value: '100%', label: 'End-to-End Ownership' },
@@ -18,6 +20,45 @@ const defaultContent = {
     intro:
       "I'm a software developer with a strong foundation in algorithmic programming, statistical thinking, and scalable system design. Currently advancing through Zone01 Kisumu, an intensive peer-to-peer coding collective focused on autonomous engineering and production-grade software.",
     bio: "Most of my engineering sits at the foundation — Go (Golang), Python (Django/FastAPI), PostgreSQL, REST APIs, and high-concurrency WebSockets — expanding smoothly into React and TypeScript when building dynamic user interfaces. I pride myself on owning systems from database schema and transactional isolation to automated CI/CD pipelines and cloud deployments.",
+    photoUrl: '/me.png',
+    hobbies: [
+      {
+        name: 'Open Source & Dev Communities',
+        icon: 'code',
+        description:
+          'Contributing to developer tooling, reviewing peers\u2019 pull requests, and learning in public through community build sessions.',
+      },
+      {
+        name: 'Chess & Strategy Games',
+        icon: 'crown',
+        description:
+          'A daily habit I use to sharpen pattern recognition, long-horizon planning, and calm decision-making under pressure.',
+      },
+      {
+        name: 'Public Speaking & Rhetoric',
+        icon: 'mic',
+        description:
+          'Trained through Toastmasters-style practice. I coach articulation and stage presence, which inspired my Articulate app.',
+      },
+      {
+        name: 'Football & Running',
+        icon: 'activity',
+        description:
+          'Five-a-side football and long-distance runs keep me disciplined, energetic, and used to working as part of a team.',
+      },
+      {
+        name: 'Reading & Technical Writing',
+        icon: 'book',
+        description:
+          'I read systems-design literature, sci-fi, and essays, then distill what I learn into articles for other engineers.',
+      },
+      {
+        name: 'Music & Audio',
+        icon: 'music',
+        description:
+          'Exploring audio engineering and rhythm is a creative counterweight to backend work and shaped my first audio app.',
+      },
+    ],
     skillCategories: [
       {
         name: 'Backend & Systems',
@@ -126,6 +167,7 @@ const defaultContent = {
     {
       id: 'piggy-bank',
       title: 'Piggy Bank — Personal Finance Tracker',
+      type: 'Personal',
       category: 'Full-Stack & Backend',
       description:
         'A comprehensive personal finance tracker built solo end to end. Features multi-account ledgering, budget tracking, transaction categorization, and an aggregated analytical insights endpoint delivering net worth and spending health in a single query.',
@@ -145,10 +187,12 @@ const defaultContent = {
     {
       id: 'social-network',
       title: 'Social Network — Real-Time Platform',
+      type: 'Internal',
       category: 'Distributed Systems',
       description:
-        'A high-concurrency collaborative social platform. Led the Go backend architecture, implementing real-time WebSocket communication hubs for instant group/private messaging, live notifications, dynamic feeds, and granular post privacy controls.',
+        'A high-concurrency collaborative social platform delivered inside the Zone01 engineering programme. Served as backend lead, implementing real-time WebSocket communication hubs for instant group/private messaging, live notifications, dynamic feeds, and granular post privacy controls.',
       highlights: [
+        'Top contributor by commit volume (~30%) on a 6-person peer team, owning authentication, middleware, CORS and data models',
         'Architected bi-directional WebSocket hub in Go handling concurrent messaging and live event streams',
         'Engineered relational database schema supporting followers, private posts, and custom close-friends filters',
         'Built reactive React interfaces with live state synchronization and cookie/session security',
@@ -164,6 +208,7 @@ const defaultContent = {
     {
       id: 'micro-seed',
       title: 'MicroSeed — AI Microfinance Underwriting',
+      type: 'Personal',
       category: 'AI & FinTech',
       description:
         'A next-generation microloan evaluation platform engineered for emerging markets. Leverages Google Gemini AI to analyze unstructured business narratives, trade patterns, and cash flow data to assess merchant creditworthiness beyond standard credit scores.',
@@ -182,6 +227,7 @@ const defaultContent = {
     {
       id: 'bloom-productivity',
       title: 'Bloom — Gamified Habit & Workflow Engine',
+      type: 'Personal',
       category: 'Full-Stack',
       description:
         'A gamified productivity platform combining habit cultivation with interactive Kanban task management, XP rewards, leveling progression, and bi-directional Google Calendar synchronization.',
@@ -200,6 +246,7 @@ const defaultContent = {
     {
       id: 'articulate',
       title: 'Articulate — AI Speech & Diction Trainer',
+      type: 'Personal',
       category: 'AI & Audio UX',
       description:
         'An offline-first vocal articulation platform based on theatrical speaker warmups (Pencil drill jaw locking, phoneme tongue twisters, and visual pacing metronome) augmented with dynamic Gemini AI challenge generation.',
@@ -218,6 +265,7 @@ const defaultContent = {
     {
       id: 'bulksend',
       title: 'BulkSend — In-Browser Carrier SMS Dispatcher',
+      type: 'Personal',
       category: 'Utilities',
       description:
         'A zero-backend browser-based SMS campaign orchestrator. Automatically parses spreadsheet data and utilizes client-side QR deep links to trigger native phone SIM messaging with zero subscription fees and total data privacy.',
@@ -236,6 +284,7 @@ const defaultContent = {
     {
       id: 'tempus-vox',
       title: 'TempusVox — Presentation Timing Stopwatch',
+      type: 'Personal',
       category: 'Utilities',
       description:
         'A professional stage timing stopwatch engineered for Toastmasters and presenters. Provides dynamic tri-color visual coaching intervals, a clutter-free Zen Mode, and persistent speaker evaluation logs.',
@@ -252,10 +301,67 @@ const defaultContent = {
       hidden: false,
     },
   ],
+  articles: [
+    {
+      id: 'race-free-go-transactions',
+      title: 'Building a Race-Free Finance API in Go',
+      excerpt:
+        'How the Go race detector surfaced a transactional-isolation bug in Piggy Bank before it ever reached production, and the locking strategy that fixed it.',
+      source: 'dev.to',
+      date: '2026-05-18',
+      readTime: '7 min read',
+      tags: ['Go', 'PostgreSQL', 'Concurrency'],
+      url: 'https://dev.to/f18charles',
+      featured: true,
+      hidden: false,
+    },
+    {
+      id: 'websocket-hub-design',
+      title: 'Designing a WebSocket Hub for Real-Time Messaging',
+      excerpt:
+        'Notes from leading the backend of a 6-person social platform: connection pools, fan-out delivery, presence tracking, and graceful reconnects.',
+      source: 'dev.to',
+      date: '2026-04-02',
+      readTime: '9 min read',
+      tags: ['Go', 'WebSockets', 'System Design'],
+      url: 'https://dev.to/f18charles',
+      featured: true,
+      hidden: false,
+    },
+    {
+      id: 'gemini-credit-scoring',
+      title: 'Using Gemini AI to Underwrite Microloans',
+      excerpt:
+        'Why unstructured business narratives carry signal that traditional credit scores miss, and how I modelled them for MicroSeed.',
+      source: 'dev.to',
+      date: '2026-03-11',
+      readTime: '6 min read',
+      tags: ['Gemini AI', 'FinTech', 'Prompt Engineering'],
+      url: 'https://dev.to/f18charles',
+      featured: false,
+      hidden: false,
+    },
+    {
+      id: 'offline-first-lessons',
+      title: 'Why I Ship Offline-First: Lessons from Articulate',
+      excerpt:
+        'Privacy-first architecture is a feature, not a constraint. A case for keeping user data in the browser whenever the product allows it.',
+      source: 'dev.to',
+      date: '2026-02-07',
+      readTime: '5 min read',
+      tags: ['Privacy', 'React', 'Architecture'],
+      url: 'https://dev.to/f18charles',
+      featured: false,
+      hidden: false,
+    },
+  ],
   contact: {
     email: 'f.18charles@gmail.com',
     github: 'https://github.com/f18charles',
     linkedin: 'https://linkedin.com/in/favor-owuor-39a31a29b/',
+    devto: 'https://dev.to/f18charles',
+    x: 'https://x.com/f18charles',
+    resumeUrl: '/Favor_Charles_Owuor_Resume.docx',
     message:
       'Open to software engineering roles, backend positions, and internships where I can build reliable, impactful software. Whether you have a project in mind, an opportunity to discuss, or just want to connect — say hello.',
   },

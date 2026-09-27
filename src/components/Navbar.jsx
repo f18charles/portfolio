@@ -2,11 +2,12 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useContent } from '../context/ContentContext.jsx'
-import { Terminal, Code2, User, Mail, Menu, X, ArrowUpRight } from 'lucide-react'
+import { Terminal, Code2, User, Mail, Menu, X, ArrowUpRight, PenLine, FileText } from 'lucide-react'
 
 const links = [
   { to: '/', label: 'Overview', icon: Terminal },
   { to: '/projects', label: 'Projects', icon: Code2 },
+  { to: '/articles', label: 'Writing', icon: PenLine },
   { to: '/about', label: 'About & CV', icon: User },
   { to: '/contact', label: 'Contact', icon: Mail },
 ]
@@ -57,6 +58,18 @@ export default function Navbar() {
 
         {/* Action Button */}
         <div className="hidden md:flex items-center gap-3">
+          {(content.contact.resumeUrl || content.hero.resumeUrl) && (
+            <a
+              href={content.contact.resumeUrl || content.hero.resumeUrl}
+              target="_blank"
+              rel="noreferrer"
+              download
+              className="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 font-mono text-xs text-paper/80 transition-all hover:border-cobalt-soft/60 hover:text-cobalt-soft active:scale-95"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              <span>Résumé</span>
+            </a>
+          )}
           <NavLink
             to="/contact"
             className="flex items-center gap-1.5 rounded-full border border-signal/40 bg-signal/10 px-4 py-1.5 font-mono text-xs font-semibold text-signal transition-all hover:bg-signal/20 hover:shadow-[0_0_15px_rgba(46,214,122,0.4)] active:scale-95"
@@ -106,6 +119,19 @@ export default function Navbar() {
                 </NavLink>
               )
             })}
+            {(content.contact.resumeUrl || content.hero.resumeUrl) && (
+              <a
+                href={content.contact.resumeUrl || content.hero.resumeUrl}
+                target="_blank"
+                rel="noreferrer"
+                download
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-lg border border-white/10 px-4 py-2.5 font-mono text-sm text-paper/70 transition-all hover:bg-white/5 hover:text-cobalt-soft"
+              >
+                <FileText className="h-4 w-4 text-cobalt-soft" />
+                Download Résumé
+              </a>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

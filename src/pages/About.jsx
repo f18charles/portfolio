@@ -13,7 +13,23 @@ import {
   Compass,
   CheckCircle2,
   Code2,
+  FileText,
+  Sparkles,
+  Crown,
+  Mic,
+  Activity,
+  BookOpen,
+  Music,
 } from 'lucide-react'
+
+const hobbyIcons = {
+  code: Code2,
+  crown: Crown,
+  mic: Mic,
+  activity: Activity,
+  book: BookOpen,
+  music: Music,
+}
 
 export default function About() {
   const { content } = useContent()
@@ -55,6 +71,9 @@ export default function About() {
     }
   }
 
+  const resumeUrl = content.contact?.resumeUrl || content.hero?.resumeUrl
+  const photoUrl = about.photoUrl || content.hero?.photoUrl
+
   return (
     <PageWrapper className="mx-auto max-w-5xl px-6 py-20 md:py-24">
       {/* Header Section */}
@@ -63,15 +82,46 @@ export default function About() {
         Engineering <span className="neon-gradient-text">Profile</span>
       </h1>
 
-      {/* Profile Narrative from CV */}
-      <AnimatedReveal className="mt-10 max-w-3xl space-y-6 text-lg leading-relaxed text-paper/85">
-        <p className="border-l-2 border-signal/60 pl-4 text-paper/90 font-medium">
-          {about.intro}
-        </p>
-        <p className="text-paper/75">
-          {about.bio}
-        </p>
-      </AnimatedReveal>
+      {/* Profile Narrative + Professional Photo */}
+      <div className="mt-10 grid gap-10 lg:grid-cols-3 lg:items-start">
+        <AnimatedReveal className="space-y-6 text-lg leading-relaxed text-paper/85 lg:col-span-2">
+          <p className="border-l-2 border-signal/60 pl-4 font-medium text-paper/90">
+            {about.intro}
+          </p>
+          <p className="text-paper/75">{about.bio}</p>
+          {resumeUrl && (
+            <a
+              href={resumeUrl}
+              target="_blank"
+              rel="noreferrer"
+              download
+              className="inline-flex items-center gap-2 rounded-lg border border-amber-soft/30 bg-amber-soft/5 px-5 py-2.5 font-mono text-xs text-amber-soft transition-all hover:bg-amber-soft/15 hover:shadow-[0_0_15px_rgba(251,191,36,0.3)] active:scale-95"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              Download Résumé (DOCX)
+            </a>
+          )}
+        </AnimatedReveal>
+
+        {photoUrl && (
+          <AnimatedReveal delay={0.1} className="relative mx-auto w-full max-w-xs">
+            <div
+              aria-hidden="true"
+              className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-cobalt/30 via-violet/20 to-signal/30 opacity-70 blur-2xl"
+            />
+            <div className="relative animate-floatSlow overflow-hidden rounded-[1.6rem] border border-white/10 bg-ink-surface/80 p-2 backdrop-blur-md">
+              <span className="absolute left-2 top-2 h-5 w-5 rounded-tl-lg border-l-2 border-t-2 border-cobalt-soft/70" />
+              <span className="absolute bottom-2 right-2 h-5 w-5 rounded-br-lg border-b-2 border-r-2 border-signal/70" />
+              <img
+                src={photoUrl}
+                alt={content.hero?.name || 'Professional photo'}
+                className="aspect-[4/5] w-full rounded-[1.2rem] object-cover object-top"
+                loading="lazy"
+              />
+            </div>
+          </AnimatedReveal>
+        )}
+      </div>
 
       {/* Technical Skill Matrix Grouped by Domain */}
       <AnimatedReveal delay={0.15} className="mt-16 space-y-8">
@@ -191,6 +241,44 @@ export default function About() {
                 </span>
               </div>
             ))}
+          </div>
+        </AnimatedReveal>
+      )}
+
+      {/* Hobbies & Interests */}
+      {about.hobbies && about.hobbies.length > 0 && (
+        <AnimatedReveal delay={0.45} className="mt-16 space-y-6">
+          <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+            <Sparkles className="h-5 w-5 text-signal" />
+            <h2 className="font-display text-3xl tracking-wide">
+              Hobbies & Life Beyond the Terminal
+            </h2>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {about.hobbies.map((hobby, idx) => {
+              const Icon = hobbyIcons[hobby.icon] || Sparkles
+              return (
+                <motion.div
+                  key={hobby.name || idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+                  className="group rounded-xl border border-white/10 bg-ink-surface/60 p-5 backdrop-blur-sm transition-all hover:border-signal/40 hover:bg-white/[0.03]"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-signal/30 bg-signal/10 text-signal transition-all group-hover:shadow-[0_0_14px_rgba(46,214,122,0.4)]">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="mt-4 font-display text-xl tracking-wide text-paper">
+                    {hobby.name}
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-paper/65">
+                    {hobby.description}
+                  </p>
+                </motion.div>
+              )
+            })}
           </div>
         </AnimatedReveal>
       )}

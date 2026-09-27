@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { useContent } from '../context/ContentContext.jsx'
 import SectionLabel from '../components/SectionLabel.jsx'
 import PageWrapper from '../components/PageWrapper.jsx'
-import { GithubIcon, LinkedinIcon } from '../components/Icons.jsx'
-import { Mail, Copy, Check, Send, MessageSquare, ArrowUpRight } from 'lucide-react'
+import { GithubIcon, LinkedinIcon, DevToIcon, XIcon } from '../components/Icons.jsx'
+import { Mail, Copy, Check, Send, ArrowUpRight, FileText } from 'lucide-react'
 import confetti from 'canvas-confetti'
+
+const pretty = (url) => (url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : '')
 
 export default function Contact() {
   const { content } = useContent()
@@ -47,7 +48,7 @@ export default function Contact() {
     },
     {
       label: 'GitHub Profile',
-      value: contact.github ? contact.github.replace('https://', '') : 'github.com/f18charles',
+      value: pretty(contact.github) || 'github.com/f18charles',
       href: contact.github,
       icon: GithubIcon,
       accent: 'text-cobalt-soft',
@@ -56,14 +57,41 @@ export default function Contact() {
     },
     {
       label: 'LinkedIn Network',
-      value: 'linkedin.com/in/favorowuor',
+      value: pretty(contact.linkedin) || 'linkedin.com/in/favorowuor',
       href: contact.linkedin,
       icon: LinkedinIcon,
       accent: 'text-violet-soft',
       border: 'hover:border-violet-soft/50',
       action: 'Connect',
     },
-  ]
+    {
+      label: 'Dev.to Writing',
+      value: pretty(contact.devto) || 'dev.to/f18charles',
+      href: contact.devto,
+      icon: DevToIcon,
+      accent: 'text-cyan-soft',
+      border: 'hover:border-cyan-soft/50',
+      action: 'Read Articles',
+    },
+    {
+      label: 'X / Twitter',
+      value: pretty(contact.x) || 'x.com/f18charles',
+      href: contact.x,
+      icon: XIcon,
+      accent: 'text-paper',
+      border: 'hover:border-white/40',
+      action: 'Follow',
+    },
+    {
+      label: 'Résumé / CV',
+      value: 'PDF · DOCX · Updated 2026',
+      href: contact.resumeUrl || content.hero?.resumeUrl,
+      icon: FileText,
+      accent: 'text-amber-soft',
+      border: 'hover:border-amber-soft/50',
+      action: 'Download',
+    },
+  ].filter((ch) => ch.href)
 
   return (
     <PageWrapper className="mx-auto max-w-4xl px-6 py-20 md:py-24">
@@ -121,7 +149,7 @@ export default function Contact() {
       </div>
 
       {/* Network Links Grid */}
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {contactChannels.map((ch) => {
           const Icon = ch.icon
           return (

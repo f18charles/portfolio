@@ -38,6 +38,7 @@ export default function Landing() {
   const visibleArticles = articles.filter((a) => !a.hidden).slice(0, 2)
   const hobbies = (about.hobbies || []).slice(0, 6)
   const resumeUrl = contact.resumeUrl || hero.resumeUrl
+  const photoUrl = hero.photoUrl || '/me.png'
 
   const socials = [
     { label: 'GitHub', href: contact.github, Icon: GithubIcon, cls: 'hover:text-cobalt-soft hover:border-cobalt-soft/50' },
@@ -198,7 +199,7 @@ export default function Landing() {
 
           {/* Right Column: Professional Photo + Interactive CLI Terminal */}
           <div className="flex flex-col items-center gap-8 lg:col-span-5">
-            {hero.photoUrl && (
+            {photoUrl && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.94 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -216,7 +217,7 @@ export default function Landing() {
                   <span className="absolute bottom-2 left-2 h-5 w-5 rounded-bl-lg border-b-2 border-l-2 border-signal/70" />
                   <span className="absolute bottom-2 right-2 h-5 w-5 rounded-br-lg border-b-2 border-r-2 border-signal/70" />
                   <img
-                    src={hero.photoUrl}
+                    src={photoUrl}
                     alt={hero.name}
                     className="aspect-[4/5] w-full rounded-[1.2rem] object-cover object-top"
                     loading="eager"

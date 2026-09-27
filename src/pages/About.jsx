@@ -72,7 +72,7 @@ export default function About() {
   }
 
   const resumeUrl = content.contact?.resumeUrl || content.hero?.resumeUrl
-  const photoUrl = about.photoUrl || content.hero?.photoUrl
+  const photoUrl = about.photoUrl || content.hero?.photoUrl || '/me.png'
 
   return (
     <PageWrapper className="mx-auto max-w-5xl px-6 py-20 md:py-24">

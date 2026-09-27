@@ -5,6 +5,29 @@ import defaultContent from '../data/defaultContent.js'
 const ROW_ID = 'site'
 const ContentContext = createContext(null)
 
+// Merge remote CMS data over the built-in defaults so that newly added fields
+// (e.g. hero.photoUrl, about.hobbies, articles) survive even when the cloud row
+// was saved before those fields existed. Plain section objects are merged one
+// level deep; arrays (projects, articles, skills...) are treated atomically.
+function mergeContent(base, remote) {
+  if (!remote || typeof remote !== 'object') return base
+
+  const merged = { ...base }
+  for (const [key, value] of Object.entries(remote)) {
+    const baseValue = base[key]
+    const bothPlainObjects =
+      value &&
+      typeof value === 'object' &&
+      !Array.isArray(value) &&
+      baseValue &&
+      typeof baseValue === 'object' &&
+      !Array.isArray(baseValue)
+
+    merged[key] = bothPlainObjects ? { ...baseValue, ...value } : value
+  }
+  return merged
+}
+
 export function ContentProvider({ children }) {
   const [content, setContent] = useState(defaultContent)
   const [loading, setLoading] = useState(true)
@@ -34,7 +57,7 @@ export function ContentProvider({ children }) {
       }
 
       if (data?.data && Object.keys(data.data).length > 0) {
-        setContent({ ...defaultContent, ...data.data })
+        setContent(mergeContent(defaultContent, data.data))
         setSavedAt(data.updated_at ? new Date(data.updated_at) : null)
       }
     } catch (err) {

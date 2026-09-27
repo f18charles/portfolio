@@ -10,7 +10,7 @@ export default function InteractiveTerminal() {
   const [history, setHistory] = useState([
     {
       type: 'system',
-      text: 'Favor Charles Owuor Terminal [v2.4.0-neon]. Type "help" or click below to inspect subsystems.',
+      text: 'Favor Charles Owuor Terminal [v2.5.0]. Type "help" or click below to inspect subsystems.',
     },
   ])
   const scrollRef = useRef(null)
@@ -212,27 +212,25 @@ export default function InteractiveTerminal() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, delay: 0.3 }}
-      className="w-full max-w-2xl rounded-lg border border-white/10 bg-ink-surface/90 shadow-2xl backdrop-blur-md overflow-hidden neon-card"
+      transition={{ duration: 0.4, delay: 0.15 }}
+      className="card w-full max-w-2xl overflow-hidden rounded-xl"
     >
       {/* Terminal Titlebar */}
-      <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5 bg-white/[0.02]">
+      <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.02] px-4 py-2.5">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
-            <span className="h-3 w-3 rounded-full bg-rose-500/80 shadow-[0_0_8px_rgba(244,63,94,0.6)]" />
-            <span className="h-3 w-3 rounded-full bg-amber-500/80 shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
-            <span className="h-3 w-3 rounded-full bg-emerald-500/80 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
+            <span className="h-3 w-3 rounded-full bg-rose-500/70" />
+            <span className="h-3 w-3 rounded-full bg-amber-500/70" />
+            <span className="h-3 w-3 rounded-full bg-emerald-500/70" />
           </div>
           <span className="ml-2 flex items-center gap-1.5 font-mono text-[11px] text-paper/50">
-            <Terminal className="h-3.5 w-3.5 text-cobalt-soft" />
+            <Terminal className="h-3.5 w-3.5 opacity-70" />
             guest@favor-dev: ~
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-signal/80 font-semibold">Active CLI</span>
-        </div>
+        <span className="font-mono text-[11px] text-paper/40">CLI</span>
       </div>
 
       {/* Terminal Screen Output */}
@@ -267,15 +265,15 @@ export default function InteractiveTerminal() {
 
       {/* Quick Action Chips */}
       <div className="border-t border-white/10 px-4 py-2 bg-white/[0.01] flex flex-wrap items-center gap-1.5">
-        <span className="font-mono text-[10px] text-paper/40 flex items-center gap-1 mr-1">
-          <Code className="h-3 w-3 text-signal" />
+        <span className="mr-1 flex items-center gap-1 font-mono text-[11px] text-paper/40">
+          <Code className="h-3 w-3 opacity-70" />
           Quick:
         </span>
         {quickCommands.map((cmd) => (
           <button
             key={cmd}
             onClick={() => handleCommand(cmd)}
-            className="rounded border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[11px] text-paper/70 transition-all hover:border-signal/50 hover:bg-signal/10 hover:text-signal active:scale-95"
+            className="rounded border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[11px] text-paper/70 transition-colors hover:border-white/25 hover:text-paper"
           >
             {cmd}
           </button>
@@ -288,9 +286,9 @@ export default function InteractiveTerminal() {
           e.preventDefault()
           handleCommand(input)
         }}
-        className="flex items-center gap-2 border-t border-white/10 px-4 py-2.5 bg-white/[0.02]"
+        className="flex items-center gap-2 border-t border-white/10 bg-white/[0.02] px-4 py-2.5"
       >
-        <span className="font-mono text-xs text-signal font-bold">$</span>
+        <span className="font-mono text-xs font-semibold text-cobalt-soft">$</span>
         <input
           type="text"
           value={input}
@@ -300,7 +298,7 @@ export default function InteractiveTerminal() {
         />
         <button
           type="submit"
-          className="rounded p-1 text-paper/40 hover:text-signal transition-colors"
+          className="rounded p-1 text-paper/40 transition-colors hover:text-paper"
           title="Run command"
         >
           <Send className="h-3.5 w-3.5" />

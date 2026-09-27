@@ -24,7 +24,7 @@ function Field({ label, ...props }) {
       <span className="mb-1 block font-mono text-xs text-paper/60">{label}</span>
       <input
         {...props}
-        className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-paper outline-none focus:border-cobalt-soft focus:shadow-[0_0_10px_rgba(96,122,254,0.3)] transition-all"
+        className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-paper outline-none transition-colors focus:border-cobalt-soft"
       />
     </label>
   )
@@ -37,7 +37,7 @@ function TextAreaField({ label, rows = 3, ...props }) {
       <textarea
         {...props}
         rows={rows}
-        className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-paper outline-none focus:border-cobalt-soft focus:shadow-[0_0_10px_rgba(96,122,254,0.3)] transition-all"
+        className="w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-paper outline-none transition-colors focus:border-cobalt-soft"
       />
     </label>
   )
@@ -48,14 +48,14 @@ function SaveButton({ onClick, saved, busy }) {
     <button
       onClick={onClick}
       disabled={busy}
-      className="flex items-center gap-1.5 rounded-lg bg-cobalt px-5 py-2 font-mono text-xs text-paper transition-all hover:bg-cobalt-soft hover:shadow-[0_0_12px_rgba(96,122,254,0.4)] disabled:opacity-50 active:scale-95"
+      className="flex items-center gap-1.5 rounded-lg bg-cobalt px-5 py-2 font-mono text-xs text-paper transition-colors hover:bg-cobalt-soft disabled:opacity-50"
     >
       {busy ? (
         'Saving…'
       ) : saved ? (
         <>
-          <Check className="h-3.5 w-3.5 text-signal" />
-          <span>Saved ✓</span>
+          <Check className="h-3.5 w-3.5" />
+          <span>Saved</span>
         </>
       ) : (
         <>
@@ -69,11 +69,8 @@ function SaveButton({ onClick, saved, busy }) {
 
 function Panel({ title, children }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-ink-surface/90 p-6 backdrop-blur-md shadow-xl neon-card">
-      <h2 className="mb-5 font-display text-2xl tracking-wide text-signal flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-signal shadow-[0_0_6px_#2ED67A]" />
-        {title}
-      </h2>
+    <div className="card rounded-xl p-6">
+      <h2 className="mb-5 font-display text-xl font-semibold tracking-tight text-paper">{title}</h2>
       <div className="space-y-4">{children}</div>
     </div>
   )
@@ -115,11 +112,11 @@ function LoginGate({ isConfigured }) {
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
       <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-signal/40 bg-signal/10 shadow-[0_0_15px_rgba(46,214,122,0.25)]">
-          <Lock className="h-5 w-5 text-signal" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-white/5">
+          <Lock className="h-5 w-5 text-paper/70" />
         </div>
         <div>
-          <h1 className="font-display text-3xl neon-gradient-text">CMS Admin Panel</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight text-paper">CMS Admin</h1>
           <p className="font-mono text-xs text-paper/50">Favor Charles Owuor Portfolio</p>
         </div>
       </div>
@@ -145,7 +142,7 @@ function LoginGate({ isConfigured }) {
         </div>
       )}
 
-      <form onSubmit={handleLogin} className="space-y-4 rounded-xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md">
+      <form onSubmit={handleLogin} className="space-y-4 rounded-xl border border-white/10 bg-white/[0.03] p-6">
         <Field
           label="Admin Email"
           type="email"
@@ -174,7 +171,7 @@ function LoginGate({ isConfigured }) {
         <button
           type="submit"
           disabled={busy}
-          className="w-full rounded-lg bg-cobalt py-2.5 font-mono text-xs font-semibold text-paper hover:bg-cobalt-soft hover:shadow-[0_0_12px_rgba(96,122,254,0.4)] transition-all disabled:opacity-50 active:scale-95"
+          className="w-full rounded-lg bg-cobalt py-2.5 font-mono text-xs font-semibold text-paper transition-colors hover:bg-cobalt-soft disabled:opacity-50"
         >
           {busy ? 'Verifying credentials…' : 'Authenticate Session'}
         </button>
@@ -375,7 +372,9 @@ export default function Admin() {
       {/* Admin Top Header */}
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
         <div>
-          <h1 className="font-display text-5xl neon-gradient-text">CMS Administration</h1>
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-paper">
+            CMS Administration
+          </h1>
           <p className="font-mono text-xs text-paper/50 mt-1">
             {savedAt ? `Last saved to cloud: ${savedAt.toLocaleString()}` : 'Ready to save'}
             {' · '}
@@ -450,7 +449,7 @@ export default function Admin() {
             />
             <Field
               label="Résumé / CV File URL"
-              placeholder="/Favor_Charles_Owuor_Resume.docx"
+              placeholder="/Favor_Charles_Owuor_Resume.pdf"
               value={hero.resumeUrl || ''}
               onChange={(e) => setHero({ ...hero, resumeUrl: e.target.value })}
             />
@@ -590,7 +589,7 @@ export default function Admin() {
                     onChange={(e) => updateProject(p.id, { title: e.target.value })}
                   />
                   <Field
-                    label="Type (Personal / Internal / Team)"
+                    label="Type (Personal / Team / Internal)"
                     placeholder="Personal"
                     value={p.type || ''}
                     onChange={(e) => updateProject(p.id, { type: e.target.value })}
@@ -601,6 +600,31 @@ export default function Admin() {
                     onChange={(e) => updateProject(p.id, { category: e.target.value })}
                   />
                 </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field
+                    label="Period / Date"
+                    placeholder="2026"
+                    value={p.period || ''}
+                    onChange={(e) => updateProject(p.id, { period: e.target.value })}
+                  />
+                  <Field
+                    label="Role"
+                    placeholder="Solo developer / Backend lead · 6-person team"
+                    value={p.role || ''}
+                    onChange={(e) => updateProject(p.id, { role: e.target.value })}
+                  />
+                </div>
+
+                <Field
+                  label="Impact metrics (comma-separated, e.g. 5 REST resources, ~95% of commits)"
+                  value={(p.metrics || []).join(', ')}
+                  onChange={(e) =>
+                    updateProject(p.id, {
+                      metrics: e.target.value.split(',').map((m) => m.trim()).filter(Boolean),
+                    })
+                  }
+                />
 
                 <TextAreaField
                   label="Description"
@@ -849,12 +873,20 @@ export default function Admin() {
               onChange={(e) => setContact({ ...contact, x: e.target.value })}
             />
           </div>
-          <Field
-            label="Résumé / CV File URL"
-            placeholder="/Favor_Charles_Owuor_Resume.docx"
-            value={contact.resumeUrl || ''}
-            onChange={(e) => setContact({ ...contact, resumeUrl: e.target.value })}
-          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="Résumé / CV PDF URL"
+              placeholder="/Favor_Charles_Owuor_Resume.pdf"
+              value={contact.resumeUrl || ''}
+              onChange={(e) => setContact({ ...contact, resumeUrl: e.target.value })}
+            />
+            <Field
+              label="Résumé / CV DOCX URL (optional)"
+              placeholder="/Favor_Charles_Owuor_Resume.docx"
+              value={contact.resumeDocxUrl || ''}
+              onChange={(e) => setContact({ ...contact, resumeDocxUrl: e.target.value })}
+            />
+          </div>
           <TextAreaField
             label="Contact Intro Message"
             value={contact.message || ''}

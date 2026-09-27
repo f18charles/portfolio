@@ -41,119 +41,78 @@ export default function Landing() {
   const photoUrl = hero.photoUrl || '/me.png'
 
   const socials = [
-    { label: 'GitHub', href: contact.github, Icon: GithubIcon, cls: 'hover:text-cobalt-soft hover:border-cobalt-soft/50' },
-    { label: 'LinkedIn', href: contact.linkedin, Icon: LinkedinIcon, cls: 'hover:text-violet-soft hover:border-violet-soft/50' },
-    { label: 'Dev.to', href: contact.devto, Icon: DevToIcon, cls: 'hover:text-signal hover:border-signal/50' },
-    { label: 'X', href: contact.x, Icon: XIcon, cls: 'hover:text-paper hover:border-white/40' },
+    { label: 'GitHub', href: contact.github, Icon: GithubIcon },
+    { label: 'LinkedIn', href: contact.linkedin, Icon: LinkedinIcon },
+    { label: 'Dev.to', href: contact.devto, Icon: DevToIcon },
+    { label: 'X', href: contact.x, Icon: XIcon },
   ].filter((s) => s.href)
 
-  return (
-    <PageWrapper className="relative overflow-hidden px-6">
-      {/* Signature ambient glowing color orbs */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-cobalt/20 blur-[100px]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-32 top-1/2 h-96 w-96 rounded-full bg-signal/15 blur-[120px]"
-      />
+  const nameParts = hero.name.split(' ')
+  const firstName = nameParts[0]
+  const restName = nameParts.slice(1).join(' ')
 
-      {/* Hero Section */}
+  return (
+    <PageWrapper className="px-6">
       <div className="mx-auto max-w-6xl py-16 md:py-24">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center">
-          {/* Left Column: Hero Text & Call to Actions */}
+        {/* Hero */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-start">
+          {/* Left: intro */}
           <div className="space-y-6 lg:col-span-7">
-            <SectionLabel>whoami --verbose</SectionLabel>
+            <SectionLabel>whoami</SectionLabel>
 
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-display text-[15vw] leading-[0.88] tracking-tight sm:text-7xl md:text-8xl lg:text-[6.2rem]"
+              transition={{ duration: 0.4 }}
+              className="font-display text-5xl font-semibold leading-[1.02] tracking-tight sm:text-6xl md:text-7xl"
             >
-              <span className="text-white transition-colors duration-300 hover:text-signal">
-                {hero.name.split(' ')[0]}
-              </span>{' '}
-              <span className="neon-gradient-text">
-                {hero.name.split(' ').slice(1).join(' ')}
-              </span>
+              <span className="text-paper">{firstName}</span>{' '}
+              <span className="text-paper/60">{restName}</span>
             </motion.h1>
 
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="h-1.5 w-48 origin-left rounded-full beam-underline animate-beam"
-            />
+            <div className="h-0.5 w-16 rounded-full bg-cobalt" />
 
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.45 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
               className="space-y-3"
             >
-              <p className="font-mono text-sm font-semibold uppercase tracking-widest text-signal">
+              <p className="font-mono text-xs uppercase tracking-wide text-cobalt-soft">
                 {hero.role}
               </p>
-              <p className="max-w-xl text-lg leading-relaxed text-paper/80 md:text-xl">
-                {hero.tagline}
-              </p>
+              <p className="max-w-xl text-lg leading-relaxed text-paper/80">{hero.tagline}</p>
             </motion.div>
 
-            {/* Status Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.55 }}
-              className="flex flex-wrap items-center gap-4"
-            >
-              <StatusBadge label={hero.status} />
-            </motion.div>
+            <StatusBadge label={hero.status} />
 
-            {/* Stats Row */}
+            {/* Stats */}
             {hero.stats && (
               <motion.div
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.65 }}
-                className="grid max-w-lg grid-cols-3 gap-3 pt-2"
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="grid max-w-lg grid-cols-3 gap-3 pt-1"
               >
                 {hero.stats.map((stat, i) => (
-                  <div
-                    key={i}
-                    className="rounded-lg border border-white/10 bg-white/[0.02] p-3 text-center backdrop-blur-sm transition-colors hover:border-cobalt-soft/50"
-                  >
-                    <div className="font-display text-2xl text-signal drop-shadow-[0_0_8px_rgba(46,214,122,0.6)]">
+                  <div key={i} className="rounded-lg border border-white/10 bg-white/[0.02] p-3">
+                    <div className="font-display text-xl font-semibold tracking-tight text-paper">
                       {stat.value}
                     </div>
-                    <div className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-paper/50">
-                      {stat.label}
-                    </div>
+                    <div className="mt-1 text-[11px] leading-snug text-paper/50">{stat.label}</div>
                   </div>
                 ))}
               </motion.div>
             )}
 
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.75 }}
-              className="flex flex-wrap gap-4 pt-4"
-            >
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-3 pt-2">
               <Link
                 to="/projects"
-                className="group flex items-center gap-2 rounded-lg bg-cobalt px-6 py-3 font-mono text-xs font-semibold text-paper shadow-[0_0_20px_rgba(30,63,224,0.4)] transition-all hover:bg-cobalt-soft hover:shadow-[0_0_25px_rgba(96,122,254,0.6)] active:scale-95"
+                className="group flex items-center gap-2 rounded-lg bg-cobalt px-5 py-2.5 font-mono text-xs font-medium text-paper transition-colors hover:bg-cobalt-soft"
               >
-                <span>View Architectures</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                to="/about"
-                className="flex items-center gap-2 rounded-lg border border-white/20 bg-white/5 px-6 py-3 font-mono text-xs text-paper/90 transition-all hover:border-signal/70 hover:text-signal hover:shadow-[0_0_15px_rgba(46,214,122,0.3)] active:scale-95"
-              >
-                <span>Explore CV & Background</span>
+                <span>View projects</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               {resumeUrl && (
                 <a
@@ -161,99 +120,84 @@ export default function Landing() {
                   target="_blank"
                   rel="noreferrer"
                   download
-                  className="flex items-center gap-2 rounded-lg border border-amber-soft/30 bg-amber-soft/5 px-6 py-3 font-mono text-xs text-amber-soft transition-all hover:bg-amber-soft/15 hover:shadow-[0_0_15px_rgba(251,191,36,0.3)] active:scale-95"
+                  className="flex items-center gap-2 rounded-lg border border-white/15 px-5 py-2.5 font-mono text-xs text-paper/80 transition-colors hover:border-white/30 hover:text-paper"
                 >
                   <FileText className="h-4 w-4" />
-                  <span>Download Résumé</span>
+                  <span>Download résumé</span>
                 </a>
               )}
-            </motion.div>
-
-            {/* Social Channels */}
-            {socials.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.85 }}
-                className="flex flex-wrap items-center gap-3 pt-2"
+              <Link
+                to="/contact"
+                className="flex items-center gap-2 rounded-lg border border-white/15 px-5 py-2.5 font-mono text-xs text-paper/80 transition-colors hover:border-white/30 hover:text-paper"
               >
-                <span className="font-mono text-[10px] uppercase tracking-widest text-paper/40">
-                  Find me
-                </span>
-                {socials.map(({ label, href, Icon, cls }) => (
+                <span>Contact</span>
+              </Link>
+            </div>
+
+            {/* Socials */}
+            {socials.length > 0 && (
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <span className="text-[11px] text-paper/40">Find me</span>
+                {socials.map(({ label, href, Icon }) => (
                   <a
                     key={label}
                     href={href}
                     target="_blank"
                     rel="noreferrer"
                     title={label}
-                    className={`inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.02] px-3 py-1.5 font-mono text-[11px] text-paper/60 transition-all active:scale-95 ${cls}`}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1.5 font-mono text-[11px] text-paper/60 transition-colors hover:border-white/25 hover:text-paper"
                   >
                     <Icon className="h-3.5 w-3.5" />
                     {label}
                   </a>
                 ))}
-              </motion.div>
+              </div>
             )}
           </div>
 
-          {/* Right Column: Professional Photo + Interactive CLI Terminal */}
-          <div className="flex flex-col items-center gap-8 lg:col-span-5">
+          {/* Right: photo */}
+          <div className="flex justify-center lg:col-span-5">
             {photoUrl && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.94 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="relative mx-auto w-full max-w-xs"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                className="w-full max-w-sm"
               >
-                <div
-                  aria-hidden="true"
-                  className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-cobalt/30 via-signal/20 to-violet/30 opacity-70 blur-2xl"
-                />
-                <div className="relative animate-floatSlow overflow-hidden rounded-[1.6rem] border border-white/10 bg-ink-surface/80 p-2 backdrop-blur-md">
-                  {/* corner brackets */}
-                  <span className="absolute left-2 top-2 h-5 w-5 rounded-tl-lg border-l-2 border-t-2 border-signal/70" />
-                  <span className="absolute right-2 top-2 h-5 w-5 rounded-tr-lg border-r-2 border-t-2 border-signal/70" />
-                  <span className="absolute bottom-2 left-2 h-5 w-5 rounded-bl-lg border-b-2 border-l-2 border-signal/70" />
-                  <span className="absolute bottom-2 right-2 h-5 w-5 rounded-br-lg border-b-2 border-r-2 border-signal/70" />
+                <div className="rounded-2xl border border-white/10 bg-ink-surface p-2">
                   <img
                     src={photoUrl}
                     alt={hero.name}
-                    className="aspect-[4/5] w-full rounded-[1.2rem] object-cover object-top"
+                    className="aspect-[4/5] w-full rounded-xl object-cover object-top"
                     loading="eager"
                   />
-                  <div className="pointer-events-none absolute inset-2 rounded-[1.2rem] bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5">
-                    <p className="font-display text-2xl tracking-wide text-paper drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                  <div className="px-2 pb-2 pt-3">
+                    <p className="font-display text-base font-semibold tracking-tight text-paper">
                       {hero.name}
                     </p>
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-signal">
-                      {hero.role}
-                    </p>
+                    <p className="mt-0.5 font-mono text-[11px] text-paper/50">{hero.role}</p>
                   </div>
                 </div>
               </motion.div>
             )}
-
-            <InteractiveTerminal />
           </div>
         </div>
 
-        {/* Featured Architectures Teaser */}
+        {/* Featured projects */}
         {featuredProjects.length > 0 && (
-          <div className="mt-28 space-y-8">
-            <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end">
+          <div className="mt-24 space-y-8">
+            <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-5 md:flex-row md:items-end">
               <div>
-                <SectionLabel>selected_works.filter(featured)</SectionLabel>
-                <h2 className="font-display text-4xl tracking-wide md:text-5xl">
-                  Featured Systems & Architectures
+                <SectionLabel>featured</SectionLabel>
+                <h2 className="font-display text-3xl font-semibold tracking-tight md:text-4xl">
+                  Featured work
                 </h2>
               </div>
               <Link
                 to="/projects"
-                className="inline-flex items-center gap-1.5 font-mono text-xs text-signal hover:underline"
+                className="inline-flex items-center gap-1.5 font-mono text-xs text-cobalt-soft hover:underline"
               >
-                <span>View all {visibleProjects.length} projects</span>
+                <span>All {visibleProjects.length} projects</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
@@ -266,19 +210,36 @@ export default function Landing() {
           </div>
         )}
 
-        {/* Hobbies Teaser */}
+        {/* Interactive terminal */}
+        <div className="mt-24 space-y-8">
+          <div className="border-b border-white/10 pb-5">
+            <SectionLabel>shell</SectionLabel>
+            <h2 className="font-display text-3xl font-semibold tracking-tight md:text-4xl">
+              Prefer a terminal?
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm text-paper/65">
+              The same projects, skills, and contact details — queryable. Type{' '}
+              <span className="font-mono text-paper/80">help</span> to list commands.
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <InteractiveTerminal />
+          </div>
+        </div>
+
+        {/* Hobbies */}
         {hobbies.length > 0 && (
-          <div className="mt-28 space-y-8">
-            <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end">
+          <div className="mt-24 space-y-8">
+            <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-5 md:flex-row md:items-end">
               <div>
-                <SectionLabel>cat ./life/beyond_the_terminal</SectionLabel>
-                <h2 className="font-display text-4xl tracking-wide md:text-5xl">
-                  Hobbies & <span className="neon-gradient-text">Interests</span>
+                <SectionLabel>beyond the terminal</SectionLabel>
+                <h2 className="font-display text-3xl font-semibold tracking-tight md:text-4xl">
+                  Hobbies & interests
                 </h2>
               </div>
               <Link
                 to="/about"
-                className="inline-flex items-center gap-1.5 font-mono text-xs text-signal hover:underline"
+                className="inline-flex items-center gap-1.5 font-mono text-xs text-cobalt-soft hover:underline"
               >
                 <span>More about me</span>
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -291,16 +252,16 @@ export default function Landing() {
                 return (
                   <motion.div
                     key={hobby.name}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-60px' }}
-                    transition={{ duration: 0.5, delay: i * 0.05 }}
-                    className="group rounded-xl border border-white/10 bg-ink-surface/60 p-5 backdrop-blur-sm transition-all hover:border-signal/40 hover:bg-white/[0.03]"
+                    transition={{ duration: 0.35, delay: i * 0.04 }}
+                    className="card rounded-xl p-5"
                   >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-signal/30 bg-signal/10 text-signal transition-all group-hover:shadow-[0_0_14px_rgba(46,214,122,0.4)]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-paper/70">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <h3 className="mt-4 font-display text-xl tracking-wide text-paper">
+                    <h3 className="mt-4 font-display text-base font-semibold tracking-tight text-paper">
                       {hobby.name}
                     </h3>
                     <p className="mt-1.5 text-sm leading-relaxed text-paper/65">
@@ -313,19 +274,19 @@ export default function Landing() {
           </div>
         )}
 
-        {/* Articles Teaser */}
+        {/* Articles */}
         {visibleArticles.length > 0 && (
-          <div className="mt-28 space-y-8 pb-16">
-            <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end">
+          <div className="mt-24 space-y-8 pb-16">
+            <div className="flex flex-col justify-between gap-4 border-b border-white/10 pb-5 md:flex-row md:items-end">
               <div>
-                <SectionLabel>tail -n 2 ./articles</SectionLabel>
-                <h2 className="font-display text-4xl tracking-wide md:text-5xl">
-                  Latest <span className="neon-gradient-text">Articles</span>
+                <SectionLabel>writing</SectionLabel>
+                <h2 className="font-display text-3xl font-semibold tracking-tight md:text-4xl">
+                  Latest articles
                 </h2>
               </div>
               <Link
                 to="/articles"
-                className="inline-flex items-center gap-1.5 font-mono text-xs text-signal hover:underline"
+                className="inline-flex items-center gap-1.5 font-mono text-xs text-cobalt-soft hover:underline"
               >
                 <span>Read all articles</span>
                 <ArrowRight className="h-3.5 w-3.5" />

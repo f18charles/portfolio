@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   Code2,
   FileText,
-  Sparkles,
   Crown,
   Mic,
   Activity,
@@ -191,7 +190,7 @@ export default function About() {
       {about.hobbies && about.hobbies.length > 0 && (
         <AnimatedReveal delay={0.3} className="mt-16 space-y-6">
           <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-            <Sparkles className="h-5 w-5 text-paper/50" />
+            <BookOpen className="h-5 w-5 text-paper/50" />
             <h2 className="font-display text-2xl font-semibold tracking-tight">
               Hobbies & interests
             </h2>
@@ -199,7 +198,7 @@ export default function About() {
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {about.hobbies.map((hobby, idx) => {
-              const Icon = hobbyIcons[hobby.icon] || Sparkles
+              const Icon = hobbyIcons[hobby.icon]
               return (
                 <motion.div
                   key={hobby.name || idx}

@@ -11,11 +11,11 @@ const defaultContent = {
     status: 'Available for Software Engineering Roles & Internships',
     photoUrl: '/me.png',
     resumeUrl: '/Favor_Charles_Owuor_Resume.pdf',
-    stats: [
-      { value: 'Solo', label: 'Shipped a production Go API' },
-      { value: '~30%', label: 'Commits on a 6-person team' },
-      { value: 'Race-tested', label: 'Go concurrency & CI/CD' },
-    ],
+    // stats: [
+    //   { value: 'Solo', label: 'Shipped a production Go API' },
+    //   { value: '~30%', label: 'Commits on a 6-person team' },
+    //   { value: 'Race-tested', label: 'Go concurrency & CI/CD' },
+    // ],
   },
   about: {
     intro:

@@ -171,12 +171,6 @@ export default function Landing() {
                     className="aspect-[4/5] w-full rounded-xl object-cover object-top"
                     loading="eager"
                   />
-                  <div className="px-2 pb-2 pt-3">
-                    <p className="font-display text-base font-semibold tracking-tight text-paper">
-                      {hero.name}
-                    </p>
-                    <p className="mt-0.5 font-mono text-[11px] text-paper/50">{hero.role}</p>
-                  </div>
                 </div>
               </motion.div>
             )}

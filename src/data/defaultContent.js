@@ -10,7 +10,7 @@ const defaultContent = {
       'I build Go APIs, real-time systems, and AI-integrated apps — and ship them end to end, from schema design to deployment.',
     status: 'Available for Software Engineering Roles & Internships',
     photoUrl: '/me.png',
-    resumeUrl: '/Favor_Charles_Owuor_Resume.pdf',
+    resumeUrl: '/Favor_Charles_Owuor_CV.pdf',
     // stats: [
     //   { value: 'Solo', label: 'Shipped a production Go API' },
     //   { value: '~30%', label: 'Commits on a 6-person team' },
@@ -24,12 +24,6 @@ const defaultContent = {
     photoUrl: '/me.png',
     hobbies: [
       {
-        name: 'Open Source & Dev Communities',
-        icon: 'code',
-        description:
-          'Contributing to developer tooling, reviewing peers\u2019 pull requests, and learning in public through community build sessions.',
-      },
-      {
         name: 'Chess & Strategy Games',
         icon: 'crown',
         description:
@@ -42,22 +36,10 @@ const defaultContent = {
           'Trained through Toastmasters-style practice. I coach articulation and stage presence, which inspired my Articulate app.',
       },
       {
-        name: 'Football & Running',
-        icon: 'activity',
-        description:
-          'Five-a-side football and long-distance runs keep me disciplined, energetic, and used to working as part of a team.',
-      },
-      {
         name: 'Reading & Technical Writing',
         icon: 'book',
         description:
           'I read systems-design literature, sci-fi, and essays, then distill what I learn into articles for other engineers.',
-      },
-      {
-        name: 'Music & Audio',
-        icon: 'music',
-        description:
-          'Exploring audio engineering and rhythm is a creative counterweight to backend work and shaped my first audio app.',
       },
     ],
     skillCategories: [

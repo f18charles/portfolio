@@ -87,7 +87,7 @@ export default function Landing() {
             <StatusBadge label={hero.status} />
 
             {/* Stats */}
-            {hero.stats && (
+            {/* {hero.stats && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -103,7 +103,7 @@ export default function Landing() {
                   </div>
                 ))}
               </motion.div>
-            )}
+            )} */}
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-3 pt-2">
@@ -205,7 +205,7 @@ export default function Landing() {
         )}
 
         {/* Interactive terminal */}
-        <div className="mt-24 space-y-8">
+        {/* <div className="mt-24 space-y-8">
           <div className="border-b border-white/10 pb-5">
             <SectionLabel>shell</SectionLabel>
             <h2 className="font-display text-3xl font-semibold tracking-tight md:text-4xl">
@@ -219,7 +219,7 @@ export default function Landing() {
           <div className="flex justify-center">
             <InteractiveTerminal />
           </div>
-        </div>
+        </div> */}
 
         {/* Hobbies */}
         {hobbies.length > 0 && (
